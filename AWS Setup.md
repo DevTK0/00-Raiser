@@ -45,6 +45,8 @@ Launch a new EC2 instance with the following configurations:
 
 Once created, connect to the instance using remote desktop.
 
+Note: First thing you should do is to change the Windows password for admin as the password will no longer be retrievable on future instances.
+
 2. Install V Rising Server
 
 To install the V Rising Server Client, first download SteamCMD from https://developer.valvesoftware.com/wiki/SteamCMD.
