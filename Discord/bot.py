@@ -1,95 +1,50 @@
 import boto3
 import discord
-import time
+from discord.ext import commands
+from handlers import vrising
+from handlers import core
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix=("00R "), case_insensitive=True, intents=intents)
 
 aws = boto3.client("ec2")
 ec2 = boto3.resource("ec2")
 
 
-@client.event
+@bot.event
 async def on_ready():
-    print("We have logged in as {0.user}".format(client))
+    print(f"Logged in as {bot.user} (ID: {bot.user.id})")
+    print("------")
 
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith("00R help"):
-        await message.channel.send(
-            "```"
-            + "00R vrising start - Starts the V Rising Server\n"
-            + "00R vrising stop - Stops the V Rising Server\n"
-            + "00R vrising status - Gets the V Rising Server status\n"
-            + "00R minecraft start - Starts the Minecraft Server\n"
-            + "00R minecraft stop - Stops the Minecraft Server\n"
-            + "00R minecraft status - Gets the Minecraft Server status\n"
-            + "```"
-        )
-
-    if message.content.startswith("00R vrising start"):
-        images = aws.describe_images(
-            Owners=["self"], Filters=[{"Name": "name", "Values": ["V Rising Server"]}]
-        )
-        amiId = images["Images"][0]["ImageId"]
-        print("Launching new instance with AMI id: " + amiId)
-        instances = ec2.create_instances(
-            LaunchTemplate={
-                "LaunchTemplateId": "lt-06d69bc8cce351113",
-                "Version": "1",
-            },
-            ImageId=amiId,
-            MinCount=1,
-            MaxCount=1,
-        )
-
-        instance = instances[0]
-
-        print("Instance (id: " + instance.instance_id + ") created")
-
-        while instance.public_ip_address == None:
-            instance.load()
-            time.sleep(10)
-
-        server_ip = instance.public_ip_address
-        await message.channel.send(
-            "Server is running with IP: {}:9876".format(server_ip)
-        )
-
-    if message.content.startswith("00R vrising stop"):
-        instances = ec2.instances.filter(
-            Filters=[
-                {
-                    "Name": "tag:Name",
-                    "Values": ["V Rising Server"],
-                }
-            ]
-        )
-        for instance in instances:
-            if instance.state["Name"] == "running":
-                instance.terminate()
-                await message.channel.send("Server stopped")
-
-    if message.content.startswith("00R vrising status"):
-        instances = ec2.instances.filter(
-            Filters=[{"Name": "tag:Name", "Values": ["V Rising Server"]}]
-        )
-
-        for instance in instances:
-            if instance.state["Name"] == "running":
-                await message.channel.send(
-                    "Server is running with IP: {}:9876".format(
-                        instance.public_ip_address
-                    )
-                )
-            else:
-                await message.channel.send("Server is not running")
+@bot.group(invoke_without_command=True, case_insensitive=True)
+async def VRising(ctx):
+    await vrising.help_handler(ctx)
 
 
-client.run("MTAxNjk3MDUyMjc5MTI2MDE5NA.GGkv3h.Us3sIeswYMohRX8EX0dHrTIXSpiTREAhn6m3HY")
+@VRising.command(
+    name="start", description="Starts the V Rising Server", aliases=["s", "up", "on"]
+)
+async def vrising_start(ctx):
+    print("start")
+    await vrising.start_handler(ctx.message, ec2, aws)
+
+
+@VRising.command(
+    name="stop", description="Stops the V Rising Server", aliases=["down", "off"]
+)
+async def vrising_stop(ctx):
+    print("stop")
+    await vrising.stop_handler(ctx.message, ec2)
+
+
+@VRising.command(
+    name="status", description="Gets the V Rising Server status", aliases=[]
+)
+async def vrising_status(ctx):
+    await vrising.status_handler(ctx.message, ec2)
+
+
+bot.run("MTAxNjk3MDUyMjc5MTI2MDE5NA.GGkv3h.Us3sIeswYMohRX8EX0dHrTIXSpiTREAhn6m3HY")
