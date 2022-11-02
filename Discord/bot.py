@@ -1,7 +1,7 @@
 import boto3
 
 import discord
-from settings import DISCORD_AUTH_TOKEN
+from settings import DISCORD_AUTH_TOKEN, GAMING_INSTANCE_NAME, LAUNCH_TEMPLATE
 from discord.ext import commands
 from handlers import vrising
 from handlers import core
@@ -31,7 +31,9 @@ async def VRising(ctx):
 )
 async def vrising_start(ctx):
     print("start")
-    await vrising.start_handler(ctx.message, ec2, aws)
+    await vrising.start_handler(
+        ctx.message, ec2, aws, GAMING_INSTANCE_NAME, LAUNCH_TEMPLATE
+    )
 
 
 @VRising.command(
@@ -39,14 +41,14 @@ async def vrising_start(ctx):
 )
 async def vrising_stop(ctx):
     print("stop")
-    await vrising.stop_handler(ctx.message, ec2)
+    await vrising.stop_handler(ctx.message, ec2, GAMING_INSTANCE_NAME)
 
 
 @VRising.command(
     name="status", description="Gets the V Rising Server status", aliases=[]
 )
 async def vrising_status(ctx):
-    await vrising.status_handler(ctx.message, ec2)
+    await vrising.status_handler(ctx.message, ec2, GAMING_INSTANCE_NAME)
 
 
 bot.run(DISCORD_AUTH_TOKEN)

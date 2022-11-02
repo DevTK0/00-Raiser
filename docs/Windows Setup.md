@@ -1,21 +1,17 @@
 # Change Administrator password
 
+The first thing you should do is to change the Windows password for admin as the password will no longer be retrievable on future instances.
+
+1. Navigate to Control Panel > User Accounts > Manage Accounts
+2. Create a new user and change it's account type to admin.
+3. Close the RDP Session and attempt to remote using your newly created account to verify that it is working.
+
 # Install SteamCMD
 
-# Install V Rising Server
+1. Use the browser to navigate to https://developer.valvesoftware.com/wiki/SteamCMD
+2. Download the SteamCMD client and extract it to the C Drive.
+3. Run the SteamCMD client.
 
-To install the V Rising Server Client, first download SteamCMD from https://developer.valvesoftware.com/wiki/SteamCMD.  
-Once done, run the SteamCMD client, a CMD window should appear and start installing the client.  
-When the SteamCMD client is done installing, enter "login anonymous" in the same terminal.  
-Afterwhich, enter "App_update 1829350" to start installing the V Rising Server client through SteamCMD.  
-Once complete, go to "" and run the start_server_example.bat script to verify that the server is working.  
-If you have any backups that you would wish to setup, go to the "" folder and upload your backup files. The server should automatically load them on startup.
-
-# Configure Firewall
-
-For clients to be able to start connecting to the server, you need to open up the TCP and UDP ports required.  
-Search for Windows Firewall and select advanced.  
-Select TCP and add 9876-9877 to the inbound port rules.
 
 # Setup startup script
 

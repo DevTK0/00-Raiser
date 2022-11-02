@@ -12,9 +12,9 @@ async def help_handler(ctx):
     )
 
 
-async def status_handler(message, ec2):
+async def status_handler(message, ec2, nametag):
     instances = ec2.instances.filter(
-        Filters=[{"Name": "tag:Name", "Values": ["V Rising Server"]}]
+        Filters=[{"Name": "tag:Name", "Values": [nametag]}]
     )
 
     found = False
@@ -30,12 +30,12 @@ async def status_handler(message, ec2):
         await message.channel.send("Server is not running")
 
 
-async def stop_handler(message, ec2):
+async def stop_handler(message, ec2, nametag):
     instances = ec2.instances.filter(
         Filters=[
             {
                 "Name": "tag:Name",
-                "Values": ["V Rising Server"],
+                "Values": [nametag],
             }
         ]
     )
@@ -45,15 +45,15 @@ async def stop_handler(message, ec2):
             await message.channel.send("Server stopped")
 
 
-async def start_handler(message, ec2, aws):
+async def start_handler(message, ec2, aws, nametag, templateId):
     images = aws.describe_images(
-        Owners=["self"], Filters=[{"Name": "name", "Values": ["V Rising Server"]}]
+        Owners=["self"], Filters=[{"Name": "name", "Values": [nametag]}]
     )
     amiId = images["Images"][0]["ImageId"]
     print("Launching new instance with AMI id: " + amiId)
     instances = ec2.create_instances(
         LaunchTemplate={
-            "LaunchTemplateId": "lt-06d69bc8cce351113",
+            "LaunchTemplateId": templateId,
             "Version": "1",
         },
         ImageId=amiId,
