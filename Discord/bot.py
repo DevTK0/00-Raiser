@@ -1,5 +1,7 @@
 import boto3
+
 import discord
+from settings import DISCORD_AUTH_TOKEN
 from discord.ext import commands
 from handlers import vrising
 from handlers import core
@@ -47,4 +49,4 @@ async def vrising_status(ctx):
     await vrising.status_handler(ctx.message, ec2)
 
 
-bot.run("MTAxNjk3MDUyMjc5MTI2MDE5NA.GGkv3h.Us3sIeswYMohRX8EX0dHrTIXSpiTREAhn6m3HY")
+bot.run(DISCORD_AUTH_TOKEN)
