@@ -95,7 +95,25 @@ To invoke the lambda created, create a new rule to run whenever the EC2 instance
 
 Create a launch template with the same configurations as step 1.
 
-1. Setup Discord Bot
+1. Navigate to EC2 > Launch Templates
+2. Fill in the following:
+   - Key Pair: (same as initial setup)
+   - Storage: (same as initial setup)
+   - Resource tags: 
+     - Name: 
+       - Value: (server name in initial setup)
+       - Resource Types: Instance, Volumes
+     - SnapAndDelete:
+       - Value: True
+       - Resource Types: Instance, Volumes
+     - Advanced setup
+       - Termination Protection
+         - Disable
+       - Detailed CloudWatch Monitoring
+         - Disable
+3. Once the launch template is complete, copy the template id and update the .env files.
+
+## **Setup Discord Bot**
 
 # FAQ
 
