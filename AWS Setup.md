@@ -22,10 +22,10 @@ The V Rising Server Client runs on a single EC2 (g4dn.large) instance. To minimi
 1. Use Snapshots instead of EBS volumes.
 2. Automatically terminate instance when idle.
 
-**On Startup**
+**On Startup**  
 The system uses a Launch Template to startup future instances of the server. This instance will use the previous instances as an AMI (see SnapAndDelete script).
 
-**On Shutdown**
+**On Shutdown**  
 When the EC2 instance has been terminated, the EBS Volume will remain so that we can back it up as a snapshot. An AWS Lambda Function has been configured to execute this on instance termination.
 
 # Setup Instructions
