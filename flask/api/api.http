@@ -1,0 +1,7 @@
+###
+GET https://localhost:8000/vrising
+content-type: application/json
+
+###
+GET https://localhost:8000/
+content-type: application/json
