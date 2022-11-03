@@ -1,4 +1,4 @@
-## Setup instructions
+# Setup instructions
 
 This article describes how this project was setup from scratch.
 
