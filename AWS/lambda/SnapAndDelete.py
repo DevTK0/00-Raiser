@@ -55,7 +55,6 @@ def lambda_handler(object, context):
         ec2.create_tags(
             Resources=snaps_created,
             Tags=[
-                {"Key": "SnapAndDelete", "Value": "True"},
                 {"Key": "Name", "Value": "Snapshot of " + GAMING_INSTANCE_NAME},
             ],
         )
@@ -69,7 +68,7 @@ def lambda_handler(object, context):
 
     # Remove previous snapshots of the volumes
     previous_snapshots = ec2.describe_snapshots(
-        Filters=[{"Name": "tag-key", "Values": ["SnapAndDelete"]}]
+        Filters=[{"Name": "tag:Name", "Values": [GAMING_INSTANCE_NAME]}]
     )["Snapshots"]
     for snapshot in previous_snapshots:
         if snapshot["SnapshotId"] not in snaps_created:
@@ -103,7 +102,7 @@ def lambda_handler(object, context):
             RootDeviceName="/dev/sda1",
             DryRun=False,
             VirtualizationType="hvm",
-            EnaSupport=True  # Supported instance types: current generation instance type, other than C4, D2, M4 instances smaller than m4.16xlarge, or T2. https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/enhanced-networking-ena.html
+            # EnaSupport=True  # Supported instance types: current generation instance type, other than C4, D2, M4 instances smaller than m4.16xlarge, or T2. https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/enhanced-networking-ena.html
             # Remove # in front of "SriovNetSupport='simple'" and add a # in front of "EnaSupport=True" to use SriovNetSupport.
             # SriovNetSupport='simple' #Supported instance types: C3, C4, D2, I2, M4 (excluding m4.16xlarge), and R3. https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sriov-networking.html
         )
@@ -115,7 +114,6 @@ def lambda_handler(object, context):
             ec2.create_tags(
                 Resources=amis_created,
                 Tags=[
-                    {"Key": "SnapAndDelete", "Value": "True"},
                     {"Key": "Name", "Value": GAMING_INSTANCE_NAME},
                 ],
             )
