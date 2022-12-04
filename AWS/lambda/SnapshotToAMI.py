@@ -7,7 +7,6 @@ GAMING_INSTANCE_SIZE_GB = 8
 
 
 def lambda_handler(object, context):
-    ec2 = boto3.client("ec2")
 
     # Connect to region
     ec2 = boto3.client("ec2", region_name=GAMING_INSTANCE_REGION)
