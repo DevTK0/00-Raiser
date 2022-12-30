@@ -1,20 +1,36 @@
 import boto3
 import botocore
 
-GAMING_INSTANCE_NAME = "Core Keeper"
-GAMING_INSTANCE_REGION = "ap-southeast-1"
-GAMING_INSTANCE_SIZE_GB = 8
+GAME = "Core Keeper"
+REGION = "ap-southeast-1"
+INSTANCE_SIZE = 8
 
 
-def lambda_handler(object, context):
+def lambda_handler():
 
     # Connect to region
-    ec2 = boto3.client("ec2", region_name=GAMING_INSTANCE_REGION)
+    ec2 = boto3.client("ec2", region_name=REGION)
 
     # Delete any current AMIs
-    images = ec2.describe_images(Owners=["self"])["Images"]
+    images = ec2.describe_images(
+        Filters=[
+            {
+                "Name": "tag:Game",
+                "Values": [
+                    GAME,
+                ],
+            },
+            {
+                "Name": "tag:InstanceType",
+                "Values": [
+                    "GAME_SERVER",
+                ],
+            },
+        ],
+        OwnerIds=["self"]
+    )["Images"]
     for ami in images:
-        if ami["Name"] == GAMING_INSTANCE_NAME:
+        if ami["Name"] == GAME:
             print("Deleting image {}".format(ami["ImageId"]))
             ec2.deregister_image(DryRun=False, ImageId=ami["ImageId"])
 
@@ -23,9 +39,15 @@ def lambda_handler(object, context):
         OwnerIds=["self"],
         Filters=[
             {
-                "Name": "tag:Name",
+                "Name": "tag:Game",
                 "Values": [
-                    "Snapshot of Core Keeper",
+                    GAME,
+                ],
+            },
+            {
+                "Name": "tag:InstanceType",
+                "Values": [
+                    "GAME_SERVER",
                 ],
             },
         ],
@@ -36,15 +58,15 @@ def lambda_handler(object, context):
 
     # Create a new AMI
     ami = ec2.register_image(
-        Name=GAMING_INSTANCE_NAME,
-        Description=GAMING_INSTANCE_NAME + " Automatic AMI",
+        Name= GAME + " Server",
+        Description= GAME + " Automatic AMI",
         BlockDeviceMappings=[
             {
                 "DeviceName": "/dev/sda1",
                 "Ebs": {
                     "DeleteOnTermination": False,
                     "SnapshotId": snapshot,
-                    "VolumeSize": GAMING_INSTANCE_SIZE_GB,
+                    "VolumeSize": INSTANCE_SIZE,
                     "VolumeType": "gp2",
                 },
             },
@@ -59,6 +81,8 @@ def lambda_handler(object, context):
     ec2.create_tags(
         Resources=[ami["ImageId"]],
         Tags=[
-            {"Key": "Name", "Value": GAMING_INSTANCE_NAME},
+            {"Key": "Name", "Value": GAME + " Server"},
+            {"Key": "Game", "Value": GAME},
+            {"Key": "InstanceType", "Value": "GAME_SERVER"},
         ],
     )
