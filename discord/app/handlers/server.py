@@ -30,3 +30,13 @@ def start_handler(game, configs):
 
         if (server["status"] == "archived"):
             return "Server has been archived due to inactivity."
+
+
+def get_ip_address(game):
+    with AWS() as aws:
+        server = aws.get_server_status(game)
+
+        if "ip_address" in server:
+            return server["ip_address"]
+
+        return None
