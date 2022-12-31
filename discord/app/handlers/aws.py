@@ -6,10 +6,15 @@ REGION = "ap-southeast-1"
 
 class AWS:
 
-    def __init__(self, region=REGION):
-        self.ec2 = boto3.client("ec2", region_name=region)
+    def __init__(self, region=REGION, ec2=None):
+        self.region = region
+        self.ec2 = ec2
 
-    def close(self):
+    def __enter__(self):
+        self.ec2 = boto3.client("ec2", region_name=self.region)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
         self.ec2.close()
 
     def get_server_status(self, game):    
@@ -209,6 +214,5 @@ class AWS:
         raise Exception("No launch template found")
 
 
-aws = AWS()
-print(aws.get_server_status(GAME))
-aws.close()
+with AWS() as aws:
+    response = aws.get_launch_template_id(GAME) 
