@@ -247,13 +247,3 @@ class AWS:
         )
 
         return response
-
-configs = {
-        "instance_type": "m1.small",
-        "volume_size": 16
-    }
-
-with AWS() as aws:
-    server = aws.get_server_status(GAME) 
-    response = aws.stop_server(server)
-print(server)

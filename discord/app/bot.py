@@ -22,12 +22,12 @@ async def VRising(ctx):
 
 @VRising.command(name="start", description="Starts the VRising server", aliases=[])
 async def vrising_start(ctx):
-    response = server.start_handler(Game.V_RISING, Configs[Game.V_RISING])
+    response = server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING])
     ctx.message.channel.send(response)
 
 @VRising.command(name="stop", description="Stops the VRising server", aliases=[])
 async def vrising_stop(ctx):
-    response = server.stop_handler(Game.V_RISING)
+    response = server.stop_handler(Game["V_RISING"])
     ctx.message.channel.send(response)
 
 async def print(message):

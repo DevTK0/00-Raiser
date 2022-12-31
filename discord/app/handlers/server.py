@@ -1,5 +1,5 @@
 import asyncio
-from aws import AWS
+from app.handlers.aws import AWS
 
 def stop_handler(game):
     
