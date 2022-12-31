@@ -13,7 +13,7 @@ def stop_handler(game):
         if (server["status"] == "stopped" or server["status"] == "archived"):
             return "Server is already stopped."
 
-def start_handler(game):
+def start_handler(game, configs):
 
     with AWS() as aws:
         server = aws.get_server_status(game)
@@ -22,7 +22,7 @@ def start_handler(game):
             return "Server is already running with IP: {}".format(server["ip"])
 
         if (server["status"] == "stopped" and server["ami_id"] is not None):
-            server.start_server(server)
+            server.start_server(server, configs)
             return "Server is starting."
 
         if (server["status"] == "stopping"):

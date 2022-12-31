@@ -9,6 +9,7 @@ class AWS:
     def __init__(self, region=REGION, ec2=None):
         self.region = region
         self.ec2 = ec2
+        self.ec2r = boto3.resource("ec2")
 
     def __enter__(self):
         self.ec2 = boto3.client("ec2", region_name=self.region)
@@ -17,9 +18,17 @@ class AWS:
     def __exit__(self, exc_type, exc_value, traceback):
         self.ec2.close()
 
+    def get_server_settings(self, game):
+        settings = {
+            "game": game,
+            "status": "Unknown",
+        }
+
+        return settings
+
     def get_server_status(self, game):    
 
-        status = { "status": "Unknown", "game": game }
+        status = {"game": game, "status": "Unknown"}
 
         if (self._check_server_is_running(game, status)): 
             return status
@@ -67,6 +76,7 @@ class AWS:
                 server["status"] = "running"
                 server["instance_id"] = instances[0]["InstanceId"]
                 server["ip_address"] = instances[0]["PublicIpAddress"]
+                server["instance_type"] = instances[0]["InstanceType"]
             return True
         
         return False
@@ -173,22 +183,32 @@ class AWS:
         return False
 
 
-    def start_server(self, server):
+    def start_server(self, server, configs):
 
         imageId = server["ami_id"]
         templateId = self._get_launch_template_id(server["game"])
 
-        instances = self.ec2.create_instances(
+        instances = self.ec2r.create_instances(
             LaunchTemplate={
                 "LaunchTemplateId": templateId,
-                "Version": "1",
             },
+            BlockDeviceMappings=[
+                {
+                    'DeviceName': '/dev/sda1',
+                    'Ebs': {
+                        'DeleteOnTermination': False,
+                        'VolumeSize': configs["volume_size"],
+                        'VolumeType': 'gp2',
+                    }
+                },
+            ],
             ImageId=imageId,
             MinCount=1,
             MaxCount=1,
         )
 
         return instances
+
 
     def _get_launch_template_id(self, game):
         response = self.ec2.describe_launch_templates(
@@ -220,13 +240,20 @@ class AWS:
 
         instanceId = server["instance_id"]
 
-        self.ec2.stop_instances(
+        response = self.ec2.terminate_instances(
             InstanceIds=[
                 instanceId,
             ],
         )
 
+        return response
 
-# with AWS() as aws:
-#     response = aws.get_server_status(GAME) 
-# print(response)
+configs = {
+        "instance_type": "m1.small",
+        "volume_size": 16
+    }
+
+with AWS() as aws:
+    server = aws.get_server_status(GAME) 
+    response = aws.stop_server(server)
+print(server)

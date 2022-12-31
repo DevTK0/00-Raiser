@@ -1,27 +1,27 @@
 import pytest
-from app.handlers import core
-from app.status import GAMES
+from app.handlers import server
+from app.settings import Game, Configs
 
+@pytest
+def test_vrising():
 
-@pytest.mark.asyncio
-async def test_start():
-    result = await core.start(GAMES.V_RISING)
-    assert result == {"status": "success"}
+    # test start server
+    response = start_handler(GAME.V_RISING, Configs[GAME.V_RISING])
+    assert response == "Server is starting"
 
-    result = await core.start(GAMES.MINECRAFT)
-    assert result == {"status": "success"}
+    # test starting a running server
+    response = start_handler(GAME.V_RISING, Configs[GAME.V_RISING])
+    assert response == "Server is already running"
 
-    result = await core.start(GAMES.CORE_KEEPER)
-    assert result == {"status": "success"}
+    # test stop server
+    response = stop_handler(GAME.V_RISING)
+    assert response == "Server is shutting down"
 
+    # test starting a stopping server
+    response = start_handler(GAME.V_RISING, Configs[GAME.V_RISING])
+    assert response == "Server is shutting down. Please wait a few minutes and try again." 
 
-@pytest.mark.asyncio
-async def test_stop():
-    result = await core.stop(GAMES.V_RISING)
-    assert result == {"status": "success"}
+    # test stopping a stopped server
+    response = stop_handler(GAME.V_RISING)
+    assert response == "Server is already stopped" 
 
-    result = await core.stop(GAMES.MINECRAFT)
-    assert result == {"status": "success"}
-
-    result = await core.stop(GAMES.CORE_KEEPER)
-    assert result == {"status": "success"}

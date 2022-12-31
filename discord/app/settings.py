@@ -5,5 +5,24 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 DISCORD_AUTH_TOKEN = os.environ.get("DISCORD_AUTH_TOKEN")
-GAMING_INSTANCE_NAME = os.environ.get("GAMING_INSTANCE_NAME")
-LAUNCH_TEMPLATE = os.environ.get("LAUNCH_TEMPLATE")
+
+Game = {
+    V_RISING: "V Rising"
+    MINECRAFT: "Minecraft"
+    CORE_KEEPER: "Core Keeper"
+}
+
+Configs = {
+    Game.V_RISING: {
+        "instance_type": "t2.micro",
+        "volume_size": 30
+    },
+    Game.MINCRAFT: {
+        "instance_type": "t2.micro",
+        "volume_size": 16
+    },
+    Game.CORE_KEEPER: {
+        "instance_type": "t2.micro",
+        "volume_size": 8
+    }
+}

@@ -1,10 +1,9 @@
 import boto3
 
 import discord
-from settings import DISCORD_AUTH_TOKEN
+from settings import DISCORD_AUTH_TOKEN, Game, Configs
 from discord.ext import commands
 from handlers import server
-from games import Game
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -23,7 +22,7 @@ async def VRising(ctx):
 
 @VRising.command(name="start", description="Starts the VRising server", aliases=[])
 async def vrising_start(ctx):
-    response = server.start_handler(Game.V_RISING)
+    response = server.start_handler(Game.V_RISING, Configs[Game.V_RISING])
     ctx.message.channel.send(response)
 
 @VRising.command(name="stop", description="Stops the VRising server", aliases=[])
