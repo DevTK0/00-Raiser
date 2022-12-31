@@ -18,14 +18,6 @@ class AWS:
     def __exit__(self, exc_type, exc_value, traceback):
         self.ec2.close()
 
-    def get_server_settings(self, game):
-        settings = {
-            "game": game,
-            "status": "Unknown",
-        }
-
-        return settings
-
     def get_server_status(self, game):    
 
         status = {"game": game, "status": "Unknown"}
@@ -76,10 +68,11 @@ class AWS:
                 server["status"] = "running"
                 server["instance_id"] = instances[0]["InstanceId"]
                 server["instance_type"] = instances[0]["InstanceType"]
+                server["network_interface_id"] = instances[0]["NetworkInterfaces"][0]["NetworkInterfaceId"]
 
                 if ("PublicIpAddress" in instances[0]):
                     server["ip_address"] = instances[0]["PublicIpAddress"]
-                    
+
             return True
         
         return False
@@ -186,10 +179,10 @@ class AWS:
         return False
 
 
-    def start_server(self, server, configs):
+    def start_server(self, game, configs):
 
-        imageId = server["ami_id"]
-        templateId = self._get_launch_template_id(server["game"])
+        server = self.get_server_status(game)
+        templateId = self._get_launch_template_id(game)
 
         instances = self.ec2r.create_instances(
             LaunchTemplate={
@@ -205,7 +198,7 @@ class AWS:
                     }
                 },
             ],
-            ImageId=imageId,
+            ImageId=server["ami_id"],
             MinCount=1,
             MaxCount=1,
         )
@@ -239,14 +232,36 @@ class AWS:
         
         raise Exception("No launch template found")
 
-    def stop_server(self, server):
+    def stop_server(self, game):
 
-        instanceId = server["instance_id"]
+        server = self.get_server_status(game)
 
         response = self.ec2.terminate_instances(
             InstanceIds=[
-                instanceId,
+                server["instance_id"],
             ],
         )
 
         return response
+
+    def wait_for_server_to_stop(self, game):
+        
+        server = self.get_server_status(game)
+
+        waiter = self.ec2.get_waiter('instance_terminated')
+        waiter.wait(
+            InstanceIds=[
+                server["instance_id"],
+            ],
+        )
+
+    def wait_for_server_ip(self, game):
+
+        server = self.get_server_status(game)
+
+        waiter = self.ec2.get_waiter('network_interface_available')
+        waiter.wait(
+            NetworkInterfaceIds=[
+                server["network_interface_id"]
+            ],
+        )
