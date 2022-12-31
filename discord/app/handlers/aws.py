@@ -19,7 +19,7 @@ class AWS:
 
     def get_server_status(self, game):    
 
-        status = { "status": "Unknown" }
+        status = { "status": "Unknown", "game": game }
 
         if (self._check_server_is_running(game, status)): 
             return status
@@ -173,7 +173,10 @@ class AWS:
         return False
 
 
-    def start_server(self, templateId, imageId):
+    def start_server(self, server):
+
+        imageId = server["ami_id"]
+        templateId = self._get_launch_template_id(server["game"])
 
         instances = self.ec2.create_instances(
             LaunchTemplate={
@@ -187,7 +190,7 @@ class AWS:
 
         return instances
 
-    def get_launch_template_id(self, game):
+    def _get_launch_template_id(self, game):
         response = self.ec2.describe_launch_templates(
             Filters=[
                 {
@@ -213,6 +216,17 @@ class AWS:
         
         raise Exception("No launch template found")
 
+    def stop_server(self, server):
 
-with AWS() as aws:
-    response = aws.get_launch_template_id(GAME) 
+        instanceId = server["instance_id"]
+
+        self.ec2.stop_instances(
+            InstanceIds=[
+                instanceId,
+            ],
+        )
+
+
+# with AWS() as aws:
+#     response = aws.get_server_status(GAME) 
+# print(response)
