@@ -6,8 +6,9 @@
 # Starting the app
 ```
 source venv/bin/activate
-python3 bot.py
+python3 -m app.bot
 ```
+Runs app/bot.py
 
 # Running Tests
 
