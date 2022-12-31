@@ -19,7 +19,7 @@ def start_handler(game, configs):
         server = aws.get_server_status(game)
         
         if (server["status"] == "running"):
-            return "Server is already running with IP: {}".format(server["ip"])
+            return "Server is already running."
 
         if (server["status"] == "stopped" and server["ami_id"] is not None):
             aws.start_server(server, configs)

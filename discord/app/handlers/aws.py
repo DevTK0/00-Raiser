@@ -75,8 +75,11 @@ class AWS:
             if (len(instances) == 1):
                 server["status"] = "running"
                 server["instance_id"] = instances[0]["InstanceId"]
-                server["ip_address"] = instances[0]["PublicIpAddress"]
                 server["instance_type"] = instances[0]["InstanceType"]
+
+                if ("PublicIpAddress" in instances[0]):
+                    server["ip_address"] = instances[0]["PublicIpAddress"]
+                    
             return True
         
         return False
