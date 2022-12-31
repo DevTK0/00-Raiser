@@ -1,8 +1,6 @@
 import asyncio
 from aws import AWS
 
-logging.basicConfig(filename="server.log" , level=logging.INFO)
-
 def help_handler(ctx):
     return "You must provide a subcommand, available commands: "
             + "```"
