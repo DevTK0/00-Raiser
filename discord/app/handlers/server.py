@@ -7,7 +7,7 @@ def stop_handler(game):
         server = aws.get_server_status(game)
 
         if (server["status"] == "running" or server["status"] == "stopping"):
-            server.stop_server(server)
+            aws.stop_server(server)
             return "Server is shutting down."
 
         if (server["status"] == "stopped" or server["status"] == "archived"):
@@ -22,7 +22,7 @@ def start_handler(game, configs):
             return "Server is already running with IP: {}".format(server["ip"])
 
         if (server["status"] == "stopped" and server["ami_id"] is not None):
-            server.start_server(server, configs)
+            aws.start_server(server, configs)
             return "Server is starting."
 
         if (server["status"] == "stopping"):
