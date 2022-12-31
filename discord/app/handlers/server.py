@@ -1,14 +1,6 @@
 import asyncio
 from aws import AWS
 
-def help_handler(ctx):
-    return "You must provide a subcommand, available commands: "
-            + "```"
-            + "00R vrising start\n"
-            + "00R vrising stop\n"
-            + "00R vrising status\n"
-            + "```"
-
 def stop_handler(game):
     
     with AWS() as aws:
