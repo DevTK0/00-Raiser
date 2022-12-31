@@ -28,12 +28,12 @@ def test_aws_wait_for_server_ip():
         print(server)
         assert server["ip_address"] is not None
 
-@pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
+# @pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
 def test_aws_wait_for_server_to_stop():
     with AWS() as aws:
         response = aws.start_server(Game.V_RISING.value, Configs[Game.V_RISING])
 
-        asyncio.sleep(10)
+        aws.wait_for_server_ip(Game.V_RISING.value)
 
         response = aws.stop_server(Game.V_RISING.value)
 

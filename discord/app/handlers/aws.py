@@ -259,9 +259,9 @@ class AWS:
 
         server = self.get_server_status(game)
 
-        waiter = self.ec2.get_waiter('network_interface_available')
+        waiter = self.ec2.get_waiter('instance_running')
         waiter.wait(
-            NetworkInterfaceIds=[
-                server["network_interface_id"]
+            InstanceIds=[
+                server["instance_id"],
             ],
         )
