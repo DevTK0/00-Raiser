@@ -1,5 +1,6 @@
 import asyncio
 
+from aws import AWS
 
 async def help_handler(ctx):
     await ctx.send(
@@ -13,61 +14,32 @@ async def help_handler(ctx):
 
 
 async def status_handler(message, ec2, nametag):
-    instances = ec2.instances.filter(
-        Filters=[{"Name": "tag:Name", "Values": [nametag]}]
-    )
-
-    found = False
-
-    for instance in instances:
-        if instance.state["Name"] == "running":
-            found = True
-            await message.channel.send(
-                "Server is running with IP: {}:9876".format(instance.public_ip_address)
-            )
-
-    if not found:
-        await message.channel.send("Server is not running")
-
+    print("status")
 
 async def stop_handler(message, ec2, nametag):
-    instances = ec2.instances.filter(
-        Filters=[
-            {
-                "Name": "tag:Name",
-                "Values": [nametag],
-            }
-        ]
-    )
-    for instance in instances:
-        if instance.state["Name"] == "running":
-            instance.terminate()
-            await message.channel.send("Server stopped")
+    print("stop")
 
 
-async def start_handler(message, ec2, aws, nametag, templateId):
-    images = aws.describe_images(
-        Owners=["self"], Filters=[{"Name": "name", "Values": [nametag]}]
-    )
-    amiId = images["Images"][0]["ImageId"]
-    print("Launching new instance with AMI id: " + amiId)
-    instances = ec2.create_instances(
-        LaunchTemplate={
-            "LaunchTemplateId": templateId,
-            "Version": "1",
-        },
-        ImageId=amiId,
-        MinCount=1,
-        MaxCount=1,
-    )
+async def start_handler(message, ec2, aws, game):
 
-    instance = instances[0]
+    server = aws.get_server_status(ec2, game)
+    templateId = aws.get_launch_template_id(aws, game)
 
-    print("Instance (id: " + instance.instance_id + ") created")
+    if (server["status"] == "running"):
+        await message.channel.send("Server is already running with IP: {}:9876".format(server["ip"]))
+        return
 
-    while instance.public_ip_address == None:
-        instance.load()
-        await asyncio.sleep(10)
+    if (server["status"] == "stopped" and server["ami_id"] is not None):
+        server.start_server(ec2, templateId, server["ami_id"])
+        await message.channel.send("Server is starting.")
+        return
 
-    server_ip = instance.public_ip_address
-    await message.channel.send("Server is running with IP: {}:9876".format(server_ip))
+    if (server["status"] == "stopping"):
+        server.start_server(ec2, templateId, server["ami_id"])
+        await message.channel.send("Server is shutting down. Please wait a few minutes and try again.")
+        return
+
+    if (server["status"] == "archived"):
+        print("Server is archived.")
+        await message.channel.send("Server has been archived due to inactivity.")
+        return

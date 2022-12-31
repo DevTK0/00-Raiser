@@ -1,35 +1,34 @@
 import boto3
 import botocore
 
-GAME = "V Rising"
+GAME = "Minecraft"
 REGION = "ap-southeast-1"
-INSTANCE_SIZE = 8
 
-def lambda_handler():
+# Connect to region
+ec2 = boto3.client("ec2", region_name=REGION)
 
-    # Connect to region
-    ec2 = boto3.client("ec2", region_name=REGION)
+def lambda_handler(ec2, game):    
 
     status = { "status": "Unknown" }
 
-    if (check_server_is_running(ec2, status)): 
+    if (check_server_is_running(ec2, game, status)): 
         return status
-    if (check_server_is_stopping(ec2, status)): 
+    if (check_server_is_stopping(ec2, game, status)): 
         return status
-    if (check_if_image_exists(ec2, status)): 
+    if (check_if_image_exists(ec2, game, status)): 
         return status
-    if (check_if_snapshot_archived(ec2, status)): 
+    if (check_if_snapshot_archived(ec2, game, status)): 
         return status    
 
     return status
 
-def check_server_is_running(ec2, server):
+def check_server_is_running(ec2, game, server):
     reservations = ec2.describe_instances(
             Filters=[
                 {
                     "Name": "tag:Game",
                     "Values": [
-                        GAME,
+                        game,
                     ],
                 },
                 {
@@ -63,13 +62,13 @@ def check_server_is_running(ec2, server):
     return False
 
 
-def check_server_is_stopping(ec2, server):
+def check_server_is_stopping(ec2, game, server):
     reservations = ec2.describe_instances(
         Filters=[
             {
                 "Name": "tag:Game",
                 "Values": [
-                    GAME,
+                    game,
                 ],
             },
             {
@@ -101,13 +100,13 @@ def check_server_is_stopping(ec2, server):
     
     return False
 
-def check_if_image_exists(ec2, server):
+def check_if_image_exists(ec2, game, server):
     images = ec2.describe_images(
         Filters=[
             {
                 "Name": "tag:Game",
                 "Values": [
-                    GAME,
+                    game,
                 ],
             },
             {
@@ -129,13 +128,13 @@ def check_if_image_exists(ec2, server):
     
     return False
 
-def check_if_snapshot_archived(ec2, server):
+def check_if_snapshot_archived(ec2, game, server):
     response = ec2.describe_snapshots(
         Filters=[
             {
                 "Name": "tag:Game",
                 "Values": [
-                    GAME,
+                    game,
                 ],
             },
             {
@@ -163,4 +162,4 @@ def check_if_snapshot_archived(ec2, server):
     
     return False
 
-print(lambda_handler())
+print(lambda_handler(ec2, GAME))
