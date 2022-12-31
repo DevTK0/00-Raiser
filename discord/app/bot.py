@@ -17,18 +17,18 @@ async def VRising(ctx):
 async def vrising_start(ctx):
     try:
         response = server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING])
-        await ctx.message.channel.send(response)
+        await ctx.send(response)
         get_ip_address.start(ctx, Game.V_RISING.value)
     except Exception as e:
-        await ctx.message.channel.send(f"Error: {e}")
+        await ctx.send(f"Error: {e}")
 
 @VRising.command(name="stop", description="Stops the VRising server", aliases=[])
 async def vrising_stop(ctx):
     try:
         response = server.stop_handler(Game.V_RISING.value)
-        await ctx.message.channel.send(response)
+        await ctx.send(response)
     except Exception as e:
-        await ctx.message.channel.send(f"Error: {e}")
+        await ctx.send(f"Error: {e}")
 
 @tasks.loop(seconds=2.5)
 async def get_ip_address(ctx, game):
@@ -36,15 +36,15 @@ async def get_ip_address(ctx, game):
         ip_address = server.get_ip_address(game)
 
         if ip_address is not None:
-            await ctx.message.channel.send(f"Server is running at {ip_address}")
+            await ctx.send(f"Server is running at {ip_address}")
             get_ip_address.cancel()
     except Exception as e:
-        await ctx.message.channel.send(f"Error: {e}")
+        await ctx.send(f"Error: {e}")
         get_ip_address.cancel()
     
 @bot.command(name="test", description="Test command", aliases=[])
 async def print(ctx, message):
-    await ctx.message.channel.send(message)
+    await ctx.send(message)
 
 
 bot.run(DISCORD_AUTH_TOKEN)
