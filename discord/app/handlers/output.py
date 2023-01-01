@@ -49,7 +49,8 @@ def set_status_color(embed, status):
     return embed
 
 def error(embed, error):
+    embed.description="Encounted an error."
     embed.color=ERROR
-    embed.add_field(name="Error", value=error, inline=False)
+    embed.add_field(name="Cause", value=error, inline=False)
 
     return embed

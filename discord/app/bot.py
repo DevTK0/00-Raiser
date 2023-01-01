@@ -22,7 +22,7 @@ async def vrising_start(ctx):
 
     try: 
         response = server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING])    
-        get_ip_address.start(ctx, Game.V_RISING.value, embed, message)
+        get_ip_address.start(message, Game.V_RISING.value, embed)
     except Exception as e:
         await message.edit(embed=output.error(embed, e))
 
@@ -34,11 +34,12 @@ async def vrising_stop(ctx):
 
     try:
         response = server.stop_handler(Game.V_RISING.value)
+        stop_server_status.start(message, Game.V_RISING.value, embed)
     except Exception as e:
         await message.edit(embed=output.error(embed, e))
 
 @tasks.loop(seconds=2.5)
-async def get_ip_address(ctx, game, embed, message):
+async def get_ip_address(message, game, embed):
     try:
         ip_address = server.get_ip_address(game)
 
@@ -46,8 +47,19 @@ async def get_ip_address(ctx, game, embed, message):
             await message.edit(embed=output.server_running(embed, ip_address))
             get_ip_address.cancel()
     except Exception as e:
-        await ctx.send(e)
+        await message.edit(embed=output.error(embed, e))
         get_ip_address.cancel()
+
+@tasks.loop(seconds=15)
+async def stop_server_status(message, game, embed):
+    try:
+        if server.get_stop_server_status(game):
+            await message.edit(embed=output.server_stopped(embed))
+            stop_server_status.cancel()
+    except Exception as e:
+        await message.edit(embed=output.error(embed, e))
+        stop_server_status.cancel()
+
     
 @bot.command(name="test", description="Test command", aliases=[])
 async def print(ctx, message):

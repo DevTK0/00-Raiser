@@ -58,3 +58,13 @@ def get_ip_address(game):
             return server["ip_address"]
 
         return None
+
+def get_stop_server_status(game):
+    with AWS() as aws:
+        server = aws.get_server_status(game)
+
+        if (server["status"] == "stopped"):
+            return True
+
+        return False
+        
