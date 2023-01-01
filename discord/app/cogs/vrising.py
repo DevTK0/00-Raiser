@@ -13,19 +13,23 @@ class VRising(commands.Cog):
 
     vrising = SlashCommandGroup(name="vrising", description="VRising commands")
 
+    # text command
     @commands.group(invoke_without_command=True, case_insensitive=True)
-    async def VRising(self, interaction):
-        # TODO: Add a help command
-        print("vrising")
+    async def VRising(self, ctx):
+        embed = output.vrising()
+        await ctx.send(embed=embed)
 
+    # text command
     @VRising.command(name="sync", description="Syncs slash commands to the guild", aliases=[])
     async def sync(self, ctx, guild_id):
         
         embed = output.embed(title="Sync", description = f'Syncing slash commands')
-        message = await ctx.send(embed=embed) # this is a text command so we use ctx.send instead
+        message = await ctx.send(embed=embed)
 
         try:
-            await self.bot.sync_commands(guild_ids=[guild_id])
+            await self.bot.sync_commands(
+                guild_ids=[guild_id]
+            )
             await message.edit(embed=output.update(embed, description = f'Synced to {guild_id}'))
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))

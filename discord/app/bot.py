@@ -38,7 +38,6 @@ async def reload(interaction, extension):
 
 @bot.slash_command(description="Unloads an extension")
 async def unload(interaction, extension):
-    """unload extension """
 
     await interaction.response.defer()
     embed = output.embed(title="Unload Extension", description = f'Unloading {extension}')
@@ -49,6 +48,7 @@ async def unload(interaction, extension):
         await message.edit(embed=output.update(embed, description = f'Unloaded {extension}'))
     except Exception as e:
         await message.edit(embed=output.error(embed, e, traceback.format_exc()))
+    
 
 @bot.event
 async def on_ready():

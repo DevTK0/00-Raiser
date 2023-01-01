@@ -14,8 +14,8 @@ DEFAULT_THUMBNAIL="https://cdn.discordapp.com/avatars/1016970522791260194/50e1bc
 
 logging.config.fileConfig("app/logging.conf")
 
-def embed(title="", description="", thumbnail=None, color=LOADING):
-    embed = discord.Embed(title=title, description=description, color=color) 
+def embed(title="", description="", thumbnail=None, color=LOADING, url=None):
+    embed = discord.Embed(title=title, description=description, color=color, url=url) 
     if thumbnail is not None:
         embed.set_thumbnail(url=thumbnail)
     return embed
@@ -25,6 +25,20 @@ def update(embed, description="", color=DEFAULT):
     embed.color=color
     return embed
 
+def vrising():
+    help = embed(
+        title="V Rising",
+        description="A vampire survival experience. Build your castle, hunt for blood, and rise in power. Conquer the world of the living in a gothic Multiplayer Survival Game.", 
+        thumbnail=VRISING_THUMBNAIL, 
+        color=DEFAULT,
+        url="https://playvrising.com"
+        )
+    help.add_field(name="/vrising start", value="Starts the server.", inline=False)
+    help.add_field(name="/vrising stop", value="Stops the server.", inline=False)
+    help.add_field(name="/vrising status", value="Gets the server status.", inline=False)
+    help.add_field(name="00R corekeeper sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
+    return help
+
 def vrising_status():
     return embed("V Rising", "Getting server status.", VRISING_THUMBNAIL, LOADING)
 
@@ -33,6 +47,29 @@ def vrising_start():
 
 def vrising_stop():
     return embed("V Rising", "Server is stopping.", VRISING_THUMBNAIL, LOADING)
+
+def corekeeper():
+    help = embed(
+        title="Core Keeper", 
+        description="Core Keeper is a survival sandbox game featuring mining, crafting, farming and exploration in a procedurally generated underground world.", 
+        thumbnail=COREKEEPER_THUMBNAIL, 
+        color=DEFAULT,
+        url="https://store.steampowered.com/app/1621690/Core_Keeper/"
+        )
+    help.add_field(name="/corekeeper start", value="Starts the server.", inline=False)
+    help.add_field(name="/corekeeper stop", value="Stops the server.", inline=False)
+    help.add_field(name="/corekeeper status", value="Gets the server status.", inline=False)
+    help.add_field(name="00R corekeeper sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
+    return help
+
+def corekeeper_status():
+    return embed("Core Keeper", "Getting server status.", COREKEEPER_THUMBNAIL, LOADING)
+
+def corekeeper_start():
+    return embed("Core Keeper", "Server is starting.", COREKEEPER_THUMBNAIL, LOADING)
+
+def corekeeper_stop():
+    return embed("Core Keeper", "Server is stopping.", COREKEEPER_THUMBNAIL, LOADING)
 
 def server_running(embed, ip):
     embed.description="Server is running."
