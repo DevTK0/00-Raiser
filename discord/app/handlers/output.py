@@ -62,6 +62,7 @@ def error(embed, error, traceback=None):
     embed.description="Encounted an error."
     embed.color=ERROR
     embed.add_field(name="Cause", value=error, inline=False)
+    #! Disabled due to embed character limits. 
     # embed.add_field(name="Traceback", value=traceback, inline=False)
 
     return embed
