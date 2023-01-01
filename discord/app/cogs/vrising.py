@@ -1,6 +1,7 @@
 import discord
 import traceback
 from discord.ext import tasks, commands, bridge
+from discord.commands import SlashCommandGroup
 
 from app.settings import DISCORD_AUTH_TOKEN, Game, Configs
 from app.handlers import server, output
@@ -10,23 +11,26 @@ class VRising(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    vrising = SlashCommandGroup(name="vrising", description="VRising commands")
+
     @commands.group(invoke_without_command=True, case_insensitive=True)
     async def VRising(self, interaction):
+        # TODO: Add a help command
         print("vrising")
 
     @VRising.command(name="sync", description="Syncs slash commands to the guild", aliases=[])
-    async def sync(self, ctx):
+    async def sync(self, ctx, guild_id):
         
         embed = output.embed(title="Sync", description = f'Syncing slash commands')
-        message = await ctx.send(embed=embed)
+        message = await ctx.send(embed=embed) # this is a text command so we use ctx.send instead
 
         try:
-            response = await self.bot.sync_commands(guild_ids=[1016971777764765746])
-            await message.edit(embed=output.update(embed, description = f'Synced {response}'))
+            await self.bot.sync_commands(guild_ids=[guild_id])
+            await message.edit(embed=output.update(embed, description = f'Synced to {guild_id}'))
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
 
-    @commands.slash_command(name="v_rising_start", description="Starts the server.")
+    @vrising.command(name="start", description="Starts the server.")
     async def start(self, interaction):
 
         await interaction.response.defer() 
@@ -46,12 +50,12 @@ class VRising(commands.Cog):
 
             if ip_address is not None:
                 await message.edit(embed=output.server_running(embed, ip_address))
-                get_ip_address.cancel()
+                self._get_ip_address.cancel()
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
-            get_ip_address.cancel()
+            self._get_ip_address.cancel()
 
-    @commands.slash_command(name="v_rising_stop", description="Stops the server.")
+    @vrising.command(name="stop", description="Stops the server.")
     async def stop(self, interaction):
 
         await interaction.response.defer() 
@@ -69,12 +73,12 @@ class VRising(commands.Cog):
         try:
             if server.get_stop_server_status(game):
                 await message.edit(embed=output.server_stopped(embed))
-                stop_server_status.cancel()
+                self._stop_server_status.cancel()
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
-            stop_server_status.cancel()
+            self._stop_server_status.cancel()
 
-    @commands.slash_command(name="v_rising_status", description="Gets the server status.")
+    @vrising.command(name="status", description="Gets the server status.")
     async def status(self, interaction):
 
         await interaction.response.defer() 
