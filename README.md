@@ -1,14 +1,21 @@
-# vrisingserver
-
-## Implementation of V Rising Server hosted on AWS
-
-
 # Starting the app
 ```
 source venv/bin/activate
 python3 -m app.bot
 ```
 Runs app/bot.py
+
+```
+00R <game> sync <guild_id>
+```
+Syncs the slash commands to the server.
+
+```
+/load <extension>
+/reload <extension>
+/unload <extension>
+```
+Slash commands for managing extensions.
 
 # Running Tests
 
