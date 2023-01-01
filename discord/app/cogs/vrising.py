@@ -1,7 +1,8 @@
 import discord
 import traceback
+from discord.ext import tasks, commands, bridge
+
 from app.settings import DISCORD_AUTH_TOKEN, Game, Configs
-from discord.ext import tasks, commands
 from app.handlers import server, output
 
 class VRising(commands.Cog):
@@ -10,9 +11,8 @@ class VRising(commands.Cog):
         self.bot = bot
 
     @commands.group(invoke_without_command=True, case_insensitive=True)
-    async def VRising(self, ctx):
+    async def VRising(self, interaction):
         print("vrising")
-
 
     @VRising.command(name="sync", description="Syncs slash commands to the guild", aliases=[])
     async def sync(self, ctx):
@@ -21,17 +21,17 @@ class VRising(commands.Cog):
         message = await ctx.send(embed=embed)
 
         try:
-            response = await ctx.bot.tree.sync(guild=ctx.guild)
+            response = await self.bot.sync_commands(guild_ids=[1016971777764765746])
             await message.edit(embed=output.update(embed, description = f'Synced {response}'))
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
 
+    @commands.slash_command(name="v_rising_start", description="Starts the server.")
+    async def start(self, interaction):
 
-    @VRising.command(name="start", description="Starts the server", aliases=[])
-    async def start(self, ctx):
-        
+        await interaction.response.defer() 
         embed = output.vrising_start()
-        message = await ctx.send(embed=embed)
+        message = await interaction.followup.send(embed=embed)
 
         try: 
             response = server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING])    
@@ -51,11 +51,12 @@ class VRising(commands.Cog):
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
             get_ip_address.cancel()
 
-    @VRising.command(name="stop", description="Stops the server", aliases=[])
-    async def stop(self, ctx):
+    @commands.slash_command(name="v_rising_stop", description="Stops the server.")
+    async def stop(self, interaction):
 
+        await interaction.response.defer() 
         embed = output.vrising_stop()
-        message = await ctx.send(embed=embed)
+        message = await interaction.followup.send(embed=embed)
 
         try:
             response = server.stop_handler(Game.V_RISING.value)
@@ -73,11 +74,12 @@ class VRising(commands.Cog):
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
             stop_server_status.cancel()
 
-    @VRising.command(name="status", description="Check the status of the server.", aliases=[])
-    async def status(self, ctx):
+    @commands.slash_command(name="v_rising_status", description="Gets the server status.")
+    async def status(self, interaction):
 
+        await interaction.response.defer() 
         embed = output.vrising_status()
-        message = await ctx.send(embed=embed)
+        message = await interaction.followup.send(embed=embed)
 
         try:
             status = server.status_handler(Game.V_RISING.value)

@@ -10,7 +10,7 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix=("00R "), case_insensitive=True, intents=intents)
 
-@bot.slash_command()
+@bot.slash_command(description="Loads an extension")
 async def load(interaction, extension):
 
     await interaction.response.defer()
@@ -23,7 +23,7 @@ async def load(interaction, extension):
     except Exception as e:
         await message.edit(embed=output.error(embed, e, traceback.format_exc()))
 
-@bot.slash_command()
+@bot.slash_command(description="Reloads an extension")
 async def reload(interaction, extension):
 
     await interaction.response.defer()
@@ -36,13 +36,14 @@ async def reload(interaction, extension):
     except Exception as e:
         await message.edit(embed=output.error(embed, e, traceback.format_exc()))
 
-@bot.slash_command()
+@bot.slash_command(description="Unloads an extension")
 async def unload(interaction, extension):
+    """unload extension """
 
     await interaction.response.defer()
     embed = output.embed(title="Unload Extension", description = f'Unloading {extension}')
     message = await interaction.followup.send(embed=embed)
-
+    
     try:
         bot.unload_extension(f'app.cogs.{extension}')
         await message.edit(embed=output.update(embed, description = f'Unloaded {extension}'))
