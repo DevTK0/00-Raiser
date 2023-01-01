@@ -12,7 +12,8 @@ COREKEEPER_THUMBNAIL="https://cdn.discordapp.com/icons/851842678340845600/1288f1
 
 def embed(title="", description="", thumbnail=None, color=LOADING):
     embed = discord.Embed(title=title, description=description, color=color) 
-    embed.set_thumbnail(url=thumbnail)
+    if thumbnail is not None:
+        embed.set_thumbnail(url=thumbnail)
     return embed
 
 def update(embed, description="", color=DEFAULT):

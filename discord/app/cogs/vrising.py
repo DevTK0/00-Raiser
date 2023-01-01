@@ -13,8 +13,22 @@ class VRising(commands.Cog):
     async def VRising(self, ctx):
         print("vrising")
 
+
+    @VRising.command(name="sync", description="Syncs slash commands to the guild", aliases=[])
+    async def sync(self, ctx):
+        
+        embed = output.embed(title="Sync", description = f'Syncing slash commands')
+        message = await ctx.send(embed=embed)
+
+        try:
+            response = await ctx.bot.tree.sync(guild=ctx.guild)
+            await message.edit(embed=output.update(embed, description = f'Synced {response}'))
+        except Exception as e:
+            await message.edit(embed=output.error(embed, e, traceback.format_exc()))
+
+
     @VRising.command(name="start", description="Starts the server", aliases=[])
-    async def vrising_start(self, ctx):
+    async def start(self, ctx):
         
         embed = output.vrising_start()
         message = await ctx.send(embed=embed)
@@ -38,7 +52,7 @@ class VRising(commands.Cog):
             get_ip_address.cancel()
 
     @VRising.command(name="stop", description="Stops the server", aliases=[])
-    async def vrising_stop(self, ctx):
+    async def stop(self, ctx):
 
         embed = output.vrising_stop()
         message = await ctx.send(embed=embed)
@@ -60,7 +74,7 @@ class VRising(commands.Cog):
             stop_server_status.cancel()
 
     @VRising.command(name="status", description="Check the status of the server.", aliases=[])
-    async def vrising_status(self, ctx):
+    async def status(self, ctx):
 
         embed = output.vrising_status()
         message = await ctx.send(embed=embed)
@@ -71,5 +85,5 @@ class VRising(commands.Cog):
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
 
-async def setup(bot):
-    await bot.add_cog(VRising(bot))
+def setup(bot):
+    bot.add_cog(VRising(bot))
