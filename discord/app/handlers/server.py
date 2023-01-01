@@ -31,6 +31,24 @@ def start_handler(game, configs):
         if (server["status"] == "archived"):
             return "Server has been archived due to inactivity."
 
+def status_handler(game):
+
+    with AWS() as aws:
+        server = aws.get_server_status(game)
+
+        if (server["status"] == "running"):
+            server["description"] = "Server is running."
+            
+        if (server["status"] == "stopped"):
+            server["description"] = "Server is stopped."
+
+        if (server["status"] == "stopping"):
+            server["description"] = "Server is shutting down."
+
+        if (server["status"] == "archived"):
+            server["description"] = "Server has been archived due to inactivity."
+
+    return server
 
 def get_ip_address(game):
     with AWS() as aws:
