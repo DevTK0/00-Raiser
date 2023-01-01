@@ -7,12 +7,6 @@ load_dotenv(find_dotenv())
 
 DISCORD_AUTH_TOKEN = os.environ.get("DISCORD_AUTH_TOKEN")
 
-# Game = {
-#     "V_RISING": "V Rising",
-#     "MINECRAFT": "Minecraft",
-#     "CORE_KEEPER": "Core Keeper",
-# }
-
 class Game(Enum):
     V_RISING = "V Rising"
     MINECRAFT = "Minecraft"
