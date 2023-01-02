@@ -2,7 +2,7 @@ import discord
 import os
 import traceback
 from app.settings import DISCORD_AUTH_TOKEN
-from discord.ext import commands
+from discord.ext import commands, tasks
 from app.handlers import output
 
 intents = discord.Intents.default()
@@ -50,10 +50,11 @@ async def unload(interaction, extension):
         await message.edit(embed=output.error(embed, e, traceback.format_exc()))
     
 
-@bot.event
-async def on_ready():
+@tasks.loop(count=1)
+async def wait_until_ready():
     for folder in os.listdir('./app/cogs'):
         if folder.endswith('.py'):
             bot.load_extension(f'app.cogs.{folder[:-3]}')
 
+wait_until_ready.start()
 bot.run(DISCORD_AUTH_TOKEN)
