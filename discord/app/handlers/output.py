@@ -48,6 +48,9 @@ def vrising_start():
 def vrising_stop():
     return embed("V Rising", "Server is stopping.", VRISING_THUMBNAIL, LOADING)
 
+def vrising_sync():
+    return embed("V Rising", "Server is syncing.", VRISING_THUMBNAIL, LOADING)
+
 def corekeeper():
     help = embed(
         title="Core Keeper", 
@@ -71,6 +74,35 @@ def corekeeper_start():
 def corekeeper_stop():
     return embed("Core Keeper", "Server is stopping.", COREKEEPER_THUMBNAIL, LOADING)
 
+def corekeeper_sync():
+    return embed("Core Keeper", "Server is syncing.", COREKEEPER_THUMBNAIL, LOADING)
+
+def minecraft():
+    help = embed(
+        title="Minecraft", 
+        description="Minecraft is a sandbox game that allows players to build and explore virtual worlds made up of blocks. Players gather resources, such as wood, stone, and dirt, to craft a variety of items and structures.", 
+        thumbnail=MINECRAFT_THUMBNAIL, 
+        color=DEFAULT,
+        url="https://www.minecraft.net/en-us"
+        )
+    help.add_field(name="/minecraft start", value="Starts the server.", inline=False)
+    help.add_field(name="/minecraft stop", value="Stops the server.", inline=False)
+    help.add_field(name="/minecraft status", value="Gets the server status.", inline=False)
+    help.add_field(name="00R minecraft sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
+    return help
+
+def minecraft_status():
+    return embed("Minecraft", "Getting server status.", MINECRAFT_THUMBNAIL, LOADING)
+
+def minecraft_start():
+    return embed("Mincraft", "Server is starting.", MINECRAFT_THUMBNAIL, LOADING)
+
+def minecraft_stop():
+    return embed("Minecraft", "Server is stopping.", MINECRAFT_THUMBNAIL, LOADING)
+
+def minecraft_sync():
+    return embed("Minecraft", "Server is syncing.", MINECRAFT_THUMBNAIL, LOADING)
+
 def server_running(embed, ip):
     embed.description="Server is running."
     embed.color=RUNNING
@@ -87,6 +119,12 @@ def server_stopped(embed):
 def server_status(embed, server):
     embed.description=server["description"]
     set_status_color(embed, server["status"])
+
+    return embed
+
+def server_synced(embed, description):
+    embed.description=description
+    embed.color=DEFAULT
 
     return embed
 
