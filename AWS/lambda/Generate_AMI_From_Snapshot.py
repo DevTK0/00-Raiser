@@ -33,6 +33,8 @@ def lambda_handler(object, context):
         for tag in volume['Tags']:
             if tag['Key'] == 'Name':
                 name = tag['Value']
+            if tag['Key'] == 'Game':
+                game = tag['Value']
         
         # Delete any current AMIs
         images = ec2.describe_images(Owners=['self'])['Images']
@@ -40,7 +42,6 @@ def lambda_handler(object, context):
             if ami['Name'] == name:
                 print('Deleting image {}'.format(ami['ImageId']))
                 ec2.deregister_image(DryRun=False,ImageId=ami['ImageId'])
-
 
         # Create a snapshot of the volume
         snap = ec2.create_snapshot(VolumeId=volume['VolumeId'], TagSpecifications=[{'ResourceType': 'snapshot', 'Tags': volume['Tags']}])
@@ -83,6 +84,7 @@ def lambda_handler(object, context):
             Resources=[ami['ImageId']],
             Tags=[
                 {'Key': 'InstanceType', 'Value': 'GAME_SERVER'},
+                {'Key': 'Game', 'Value': game},
                 {'Key': 'Name', 'Value': name}
             ]
         )
