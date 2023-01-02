@@ -118,7 +118,11 @@ def server_stopped(embed):
 
 def server_status(embed, server):
     embed.description=server["description"]
+    
     set_status_color(embed, server["status"])
+
+    if ("ip_address" in server):
+        embed.add_field(name="IP Address", value=server["ip_address"], inline=False)
 
     return embed
 
