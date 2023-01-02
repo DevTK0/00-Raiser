@@ -3,6 +3,13 @@ import asyncio
 from app.handlers.aws import AWS
 from app.settings import Game, Configs, Instance
 
+def test_aws_get_server_status():
+    with AWS() as aws:
+        server = aws.get_server_status(Game.CORE_KEEPER.value)
+        print(server)
+        # assert True == False
+        
+
 @pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
 def test_aws_start_server():
     with AWS() as aws:
