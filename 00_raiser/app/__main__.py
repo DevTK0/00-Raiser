@@ -56,5 +56,9 @@ async def wait_until_ready():
         if folder.endswith('.py'):
             bot.load_extension(f'app.cogs.{folder[:-3]}')
 
-wait_until_ready.start()
-bot.run(DISCORD_AUTH_TOKEN)
+def main():
+    wait_until_ready.start()
+    bot.run(DISCORD_AUTH_TOKEN)
+
+if __name__ == "__main__":
+    main()
