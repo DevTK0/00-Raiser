@@ -36,7 +36,7 @@ def vrising():
     help.add_field(name="/vrising start", value="Starts the server.", inline=False)
     help.add_field(name="/vrising stop", value="Stops the server.", inline=False)
     help.add_field(name="/vrising status", value="Gets the server status.", inline=False)
-    help.add_field(name="00R corekeeper sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
+    help.add_field(name="00R vrising sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
     return help
 
 def vrising_status():
