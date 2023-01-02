@@ -38,9 +38,10 @@ class CoreKeeper(commands.Cog):
         await interaction.response.defer() 
         embed = output.corekeeper_start()
         message = await interaction.followup.send(embed=embed)
+        user_configs = {}
 
         try: 
-            response = server.start_handler(Game.CORE_KEEPER.value, Configs[Game.CORE_KEEPER])    
+            response = server.start_handler(Game.CORE_KEEPER.value, Configs[Game.CORE_KEEPER] | user_configs)    
             self._get_ip_address.start(message, Game.CORE_KEEPER.value, embed)
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))

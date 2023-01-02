@@ -40,9 +40,10 @@ class Minecraft(commands.Cog):
         await interaction.response.defer() 
         embed = output.minecraft_start()
         message = await interaction.followup.send(embed=embed)
+        user_configs = {}
 
         try: 
-            response = server.start_handler(Game.MINECRAFT.value, Configs[Game.MINECRAFT])    
+            response = server.start_handler(Game.MINECRAFT.value, Configs[Game.MINECRAFT] | user_configs)    
             self._get_ip_address.start(message, Game.MINECRAFT.value, embed)
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))

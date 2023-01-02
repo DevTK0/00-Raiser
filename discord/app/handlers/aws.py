@@ -198,6 +198,7 @@ class AWS:
                     }
                 },
             ],
+            InstanceType= configs["instance_type"],
             ImageId=server["ami_id"],
             MinCount=1,
             MaxCount=1,

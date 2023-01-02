@@ -40,9 +40,10 @@ class VRising(commands.Cog):
         await interaction.response.defer() 
         embed = output.vrising_start()
         message = await interaction.followup.send(embed=embed)
-
+        user_configs = {}
+        
         try: 
-            response = server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING])    
+            response = server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING] | user_configs)    
             self._get_ip_address.start(message, Game.V_RISING.value, embed)
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
