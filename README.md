@@ -25,7 +25,7 @@ Slash commands for managing extensions.
 ```
 pytest
 ```
-
+ 
 ## Running specific tests
 ```
 pytest -k <method_name> -v
