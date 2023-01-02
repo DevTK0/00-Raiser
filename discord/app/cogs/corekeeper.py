@@ -21,14 +21,14 @@ class CoreKeeper(commands.Cog):
     @CoreKeeper.command(name="sync", description="Syncs slash commands to the guild", aliases=[])
     async def sync(self, ctx, guild_id):
         
-        embed = output.embed(title="Sync", description = f'Syncing slash commands')
+        embed = output.corekeeper_sync()
         message = await ctx.send(embed=embed) # this is a text command so we use ctx.send instead
 
         try:
             await self.bot.sync_commands(
                 guild_ids=[guild_id]
             )
-            await message.edit(embed=output.update(embed, description = f'Synced to {guild_id}'))
+            await message.edit(embed=output.server_synced(embed, description = f'Synced to {guild_id}'))
         except Exception as e:
             await message.edit(embed=output.error(embed, e, traceback.format_exc()))
 
