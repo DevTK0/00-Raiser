@@ -1,5 +1,5 @@
 import discord
-import logging.config
+# import logging.config
 
 DEFAULT=0x2a82c9
 LOADING=0xdfca1f
@@ -12,7 +12,7 @@ MINECRAFT_THUMBNAIL="https://cdn.discordapp.com/icons/302094807046684672/a_4a2d4
 COREKEEPER_THUMBNAIL="https://cdn.discordapp.com/icons/851842678340845600/1288f168ce7d27e283fd922569e458d0.webp?size=32"
 DEFAULT_THUMBNAIL="https://cdn.discordapp.com/avatars/1016970522791260194/50e1bc4a18d23f6cbf4863a2f541acd1.webp?size=32"
 
-logging.config.fileConfig("app/logging.conf")
+# logging.config.fileConfig("app/logging.conf")
 
 def embed(title="", description="", thumbnail=None, color=LOADING, url=None):
     embed = discord.Embed(title=title, description=description, color=color, url=url) 
@@ -145,7 +145,7 @@ def error(embed, error, traceback=None):
     embed.color=ERROR
     embed.add_field(name="Cause", value=error, inline=False)
 
-    logging.error(error)
-    logging.error(traceback)
+    # logging.error(error)
+    # logging.error(traceback)
 
     return embed
