@@ -95,7 +95,7 @@ def minecraft_status():
     return embed("Minecraft", "Getting server status.", MINECRAFT_THUMBNAIL, LOADING)
 
 def minecraft_start():
-    return embed("Mincraft", "Server is starting.", MINECRAFT_THUMBNAIL, LOADING)
+    return embed("Minecraft", "Server is starting.", MINECRAFT_THUMBNAIL, LOADING)
 
 def minecraft_stop():
     return embed("Minecraft", "Server is stopping.", MINECRAFT_THUMBNAIL, LOADING)
