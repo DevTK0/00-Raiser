@@ -6,9 +6,12 @@ def stop_handler(game):
     with AWS() as aws:
         server = aws.get_server_status(game)
 
-        if (server["status"] == "running" or server["status"] == "stopping"):
+        if (server["status"] == "running"):
             aws.stop_server(game)
             return "Server is shutting down."
+        
+        if (server["status"] == "stopping"):
+            return "Server is already shutting down."
 
         if (server["status"] == "stopped" or server["status"] == "archived"):
             return "Server is already stopped."
