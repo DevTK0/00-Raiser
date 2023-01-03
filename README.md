@@ -1,38 +1,36 @@
 # Starting the app
+This application uses poetry for it's dependency management. Please ensure that you have it installed.
 ```
- python3 -m venv venv
-source venv/bin/activate
-python3 -m pip install -e .
-python3 -m app.bot
+poetry install
+poetry run app
 ```
-Runs app/bot.py
 
+Run the following to sync the slash commands to the server.
 ```
 00R <game> sync <guild_id>
 ```
-Syncs the slash commands to the server.
 
+The following slash commands are available:
 ```
-/load <extension>
-/reload <extension>
-/unload <extension>
+/<game> start
+/<game> stop
+/<game> status
 ```
-Slash commands for managing extensions.
 
 # Running Tests
 
-## Run all tests
-```
-pytest
-```
- 
-## Running specific tests
-```
-pytest -k <method_name> -v
+
+```bash
+# run all tests
+poetry pytest
+
+# run specific tests
+poetry pytest -k <method_name> -v
 ```
 
--k flag will run all tests that satisfy the substring matching on the method name
-
+# Deployment
+The bot is hosted on railway.app
+Any changes to the repository will automatically trigger a deployment.
 
 # FAQs
 1. Slash commands for the cogs aren't working.
