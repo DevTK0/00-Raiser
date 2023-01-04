@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "app"
 version = "0.1.0"
-description = ""
+description = "A bot for managing game servers."
 authors = ["devtk0 <tko.developer.02@gmail.com>"]
 readme = "README.md"
 packages = [{include = "app"}]
