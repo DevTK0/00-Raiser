@@ -40,7 +40,7 @@ Configs = {
         "volume_size": 30
     },
     Game.MINECRAFT: {
-        "instance_type": Instance.T2_MEDIUM.value,
+        "instance_type": Instance.C5A_LARGE.value,
         "volume_size": 16
     },
     Game.CORE_KEEPER: {
