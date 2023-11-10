@@ -44,7 +44,7 @@ Configs = {
         "volume_size": 16
     },
     Game.CORE_KEEPER: {
-        "instance_type": Instance.C5A_LARGE.value,
+        "instance_type": Instance.C5_LARGE.value,
         "volume_size": 8
     }
 }
