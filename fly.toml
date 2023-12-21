@@ -1,0 +1,14 @@
+# fly.toml app configuration file generated for 00-raiser on 2023-12-21T12:44:06+08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "00-raiser"
+primary_region = "sin"
+
+[build]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
