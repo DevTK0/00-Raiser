@@ -3,6 +3,9 @@ import os
 from enum import Enum
 from dotenv import load_dotenv, find_dotenv
 
+import logging.config
+logging.config.fileConfig("app/logging.conf")
+
 load_dotenv(find_dotenv())
 
 DISCORD_AUTH_TOKEN = os.environ.get("DISCORD_AUTH_TOKEN")
