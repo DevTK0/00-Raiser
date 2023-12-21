@@ -29,8 +29,11 @@ poetry pytest -k <method_name> -v
 ```
 
 # Deployment
-The bot is hosted on railway.app
-Any changes to the repository will automatically trigger a deployment.
+The bot is hosted on Fly.io
+
+```
+flyctl launch
+```
 
 # FAQs
 1. Slash commands for the cogs aren't working.
