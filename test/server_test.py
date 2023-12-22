@@ -4,6 +4,7 @@ from app.handlers import server
 from app.handlers.aws import AWS
 from app.settings import Game, Configs
 
+@pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
 def test_vrising():
     # test start server
     response = server.start_handler(Game.CORE_KEEPER.value, Configs[Game.CORE_KEEPER])
@@ -32,7 +33,7 @@ def test_vrising():
     assert response == "Server is already stopped." 
 
 
-@pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
+# @pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
 def test_vrising_start():
     response = server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING])
     assert response == "Server is starting."

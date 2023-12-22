@@ -1,5 +1,6 @@
 import boto3
 import botocore
+import logging
 
 GAME = "Minecraft"
 REGION = "ap-southeast-1"
@@ -24,14 +25,14 @@ class AWS:
 
         if (self._check_server_is_running(game, status)): 
             return status
-        if (self._check_server_is_stopping(game, status)): 
+        elif (self._check_server_is_stopping(game, status)): 
             return status
-        if (self._check_if_image_exists(game, status)): 
+        elif (self._check_if_image_exists(game, status)): 
             return status
-        if (self._check_if_snapshot_archived(game, status)): 
+        elif (self._check_if_snapshot_archived(game, status)): 
             return status    
-
-        return status
+        else:
+            raise Exception("Unknown state.")
 
     def _check_server_is_running(self, game, server):
         reservations = self.ec2.describe_instances(
