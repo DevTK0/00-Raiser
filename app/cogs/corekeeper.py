@@ -45,7 +45,7 @@ class CoreKeeper(commands.Cog):
         user_configs = self.user_configs
 
         try: 
-            response = server.start_handler(Game.CORE_KEEPER.value, Configs[Game.CORE_KEEPER] | user_configs)    
+            server.start_handler(Game.CORE_KEEPER.value, Configs[Game.CORE_KEEPER] | user_configs)
             self._get_server_details.start(message, Game.CORE_KEEPER.value, embed)
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
@@ -86,7 +86,7 @@ class CoreKeeper(commands.Cog):
         message = await interaction.followup.send(embed=embed)
 
         try:
-            response = server.stop_handler(Game.CORE_KEEPER.value)
+            server.stop_handler(Game.CORE_KEEPER.value)
             self._stop_server_status.start(message, Game.CORE_KEEPER.value, embed)
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
@@ -100,6 +100,19 @@ class CoreKeeper(commands.Cog):
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
             self._stop_server_status.cancel()
+
+    @corekeeper.command(name="restart", description="Restarts the server.")
+    async def restart(self, interaction):
+
+        await interaction.response.defer() 
+        embed = output_formatter.corekeeper_restart()
+        message = await interaction.followup.send(embed=embed)
+
+        try:
+            server.restart_handler(Game.CORE_KEEPER.value)
+            self._get_server_details.start(message, Game.CORE_KEEPER.value, embed)
+        except Exception as e:
+            await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
 
     @corekeeper.command(name="status", description="Gets the server status.")
     async def status(self, interaction):

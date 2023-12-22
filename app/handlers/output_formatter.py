@@ -21,9 +21,14 @@ def embed(title="", description="", thumbnail=None, color=LOADING, url=None):
         embed.set_thumbnail(url=thumbnail)
     return embed
 
-def update(embed, description="", color=DEFAULT):
-    embed.description=description
-    embed.color=color
+# def update(embed, description="", color=DEFAULT):
+#     embed.description=description
+#     embed.color=color
+#     return embed
+
+def restart(embed):
+    embed.description="Server is restarting."
+    embed.color=LOADING
     return embed
 
 def set_instance_error(embed, instance_type):
@@ -67,6 +72,9 @@ def vrising_start():
 def vrising_stop():
     return embed("V Rising", "Server is stopping.", VRISING_THUMBNAIL, LOADING)
 
+def vrising_restart():
+    return embed("V Rising", "Server is restarting.", VRISING_THUMBNAIL, LOADING)
+
 def vrising_sync():
     return embed("V Rising", "Server is syncing.", VRISING_THUMBNAIL, LOADING)
 
@@ -97,6 +105,9 @@ def corekeeper_start():
 def corekeeper_stop():
     return embed("Core Keeper", "Server is stopping.", COREKEEPER_THUMBNAIL, LOADING)
 
+def corekeeper_restart():
+    return embed("Core Keeper", "Server is restarting.", COREKEEPER_THUMBNAIL, LOADING)
+
 def corekeeper_sync():
     return embed("Core Keeper", "Server is syncing.", COREKEEPER_THUMBNAIL, LOADING)
 
@@ -125,6 +136,9 @@ def minecraft_start():
 
 def minecraft_stop():
     return embed("Minecraft", "Server is stopping.", MINECRAFT_THUMBNAIL, LOADING)
+
+def minecraft_restart():
+    return embed("Minecraft", "Server is restarting.", MINECRAFT_THUMBNAIL, LOADING)
 
 def minecraft_sync():
     return embed("Minecraft", "Server is syncing.", MINECRAFT_THUMBNAIL, LOADING)

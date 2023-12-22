@@ -246,6 +246,18 @@ class AWS:
 
         return response
 
+    def restart_server(self, game):
+
+        server = self.get_server_status(game)
+
+        response = self.ec2.reboot_instances(
+            InstanceIds=[
+                server["instance_id"],
+            ],
+        )
+
+        return response
+
     def wait_for_server_to_stop(self, game):
         
         server = self.get_server_status(game)

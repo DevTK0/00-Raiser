@@ -43,7 +43,7 @@ class Minecraft(commands.Cog):
         user_configs = self.user_configs
 
         try: 
-            response = server.start_handler(Game.MINECRAFT.value, Configs[Game.MINECRAFT] | user_configs)    
+            server.start_handler(Game.MINECRAFT.value, Configs[Game.MINECRAFT] | user_configs)    
             self._get_server_details.start(message, Game.MINECRAFT.value, embed)
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
@@ -84,7 +84,7 @@ class Minecraft(commands.Cog):
         message = await interaction.followup.send(embed=embed)
 
         try:
-            response = server.stop_handler(Game.MINECRAFT.value)
+            server.stop_handler(Game.MINECRAFT.value)
             self._stop_server_status.start(message, Game.MINECRAFT.value, embed)
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
@@ -98,6 +98,19 @@ class Minecraft(commands.Cog):
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
             self._stop_server_status.cancel()
+
+    @minecraft.command(name="restart", description="Restarts the server.")
+    async def restart(self, interaction):
+
+        await interaction.response.defer() 
+        embed = output_formatter.minecraft_restart()
+        message = await interaction.followup.send(embed=embed)
+
+        try:
+            server.restart_handler(Game.MINECRAFT.value)
+            self._get_server_details.start(message, Game.MINECRAFT.value, embed)
+        except Exception as e:
+            await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
 
     @minecraft.command(name="status", description="Gets the server status.")
     async def status(self, interaction):

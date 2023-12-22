@@ -43,7 +43,7 @@ class VRising(commands.Cog):
         user_configs = self.user_configs
         
         try: 
-            response = server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING] | user_configs)    
+            server.start_handler(Game.V_RISING.value, Configs[Game.V_RISING] | user_configs)    
             self._get_server_details.start(message, Game.V_RISING.value, embed)
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
@@ -84,7 +84,7 @@ class VRising(commands.Cog):
         message = await interaction.followup.send(embed=embed)
 
         try:
-            response = server.stop_handler(Game.V_RISING.value)
+            server.stop_handler(Game.V_RISING.value)
             self._stop_server_status.start(message, Game.V_RISING.value, embed)
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
@@ -98,6 +98,20 @@ class VRising(commands.Cog):
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
             self._stop_server_status.cancel()
+
+    
+    @vrising.command(name="restart", description="Restarts the server.")
+    async def restart(self, interaction):
+
+        await interaction.response.defer() 
+        embed = output_formatter.vrising_restart()
+        message = await interaction.followup.send(embed=embed)
+
+        try:
+            server.restart_handler(Game.V_RISING.value)
+            self._get_server_details.start(message, Game.V_RISING.value, embed)
+        except Exception as e:
+            await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
 
     @vrising.command(name="status", description="Gets the server status.")
     async def status(self, interaction):

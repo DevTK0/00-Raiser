@@ -33,6 +33,23 @@ def start_handler(game, configs):
             logging.error(f"Unknown state found for {game} with configs: {configs}. {server}")
             raise Exception("Unknown state.")
 
+def restart_handler(game):
+    
+        with AWS() as aws:
+            server = aws.get_server_status(game)
+    
+            if (server["status"] == "running"):
+                aws.restart_server(game)
+            elif (server["status"] == "stopping"):
+                raise Exception("Server is shutting down.")
+            elif (server["status"] == "archived"):
+                raise Exception("Server has been archived due to inactivity.")
+            elif (server["status"] == "stopped"):
+                raise Exception("Server is not running, use the start command instead.")
+            else:
+                logging.error(f"Unknown state found for {game}. {server}")
+                raise Exception("Unknown state.")
+
 def status_handler(game):
 
     with AWS() as aws:
