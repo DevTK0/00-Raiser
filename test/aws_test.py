@@ -2,7 +2,9 @@ import pytest
 import asyncio
 from app.handlers.aws import AWS
 from app.settings import Game, Configs, Instance
+import logging
 
+@pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
 def test_aws_get_server_status():
     with AWS() as aws:
         server = aws.get_server_status(Game.CORE_KEEPER.value)
@@ -23,6 +25,13 @@ def test_aws_stop_server():
         response = aws.stop_server(Game.CORE_KEEPER.value)
         print(response)
         assert len(response["TerminatingInstances"]) == 1
+
+@pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
+def test_aws_restart_server():
+    with AWS() as aws:
+        response = aws.restart_server(Game.CORE_KEEPER.value)
+        print(response)
+        assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
 
 @pytest.mark.skip(reason="Only run this test in insolation, do not run with other tests.")
 def test_aws_wait_for_server_ip():

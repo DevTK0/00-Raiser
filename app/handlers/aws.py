@@ -27,8 +27,13 @@ class AWS:
             return status
         elif (self._check_server_is_stopping(game, status)): 
             return status
+        # if volume exists, backup is in progress - considered "stopping"
+        elif (self._check_if_volume_exists(game, status)): 
+            return status
+        # if image exists, backup is completed - considered "stopped"
         elif (self._check_if_image_exists(game, status)): 
             return status
+
         elif (self._check_if_snapshot_archived(game, status)): 
             return status    
         else:
@@ -113,6 +118,41 @@ class AWS:
             if (len(instances) != 0):
                 server["status"] = "stopping"
                 server["instance_id"] = instances[0]["InstanceId"]
+                return True
+        
+        return False
+    
+    def _check_if_volume_exists(self, game, server):
+        volumes = self.ec2.describe_volumes(
+            Filters=[
+                {
+                    "Name": "tag:Game",
+                    "Values": [
+                        game,
+                    ],
+                },
+                {
+                    "Name": "tag:InstanceType",
+                    "Values": [
+                        "GAME_SERVER",
+                    ],
+                },
+                        
+            ],
+        )["Volumes"]
+
+        if (len(volumes) > 1):
+            raise Exception("More than one volume")
+
+        if (len(volumes) == 1):
+
+            if (volumes[0]["State"] == "creating" or volumes[0]["State"] == "available" or 
+                volumes[0]["State"] == "in-use" or volumes[0]["State"] == "deleting"):
+                server["status"] = "stopping"
+                server["volume_id"] = volumes[0]["VolumeId"]
+                server["volume_size"] = volumes[0]["Size"]
+                server["volume_type"] = volumes[0]["VolumeType"]
+            
                 return True
         
         return False
