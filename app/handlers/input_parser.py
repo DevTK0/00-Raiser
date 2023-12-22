@@ -3,9 +3,7 @@ from app.handlers import output_formatter
 
 import logging
 
-def check_instance(user_configs, instance_type):
-   
-    embed = output_formatter.corekeeper_set_instance_success(instance_type)
+def check_instance(embed, user_configs, instance_type):
 
     if instance_type == Instance.T2_SMALL.value:
         user_configs["instance_type"] = Instance.T2_SMALL.value
@@ -39,7 +37,7 @@ def check_instance(user_configs, instance_type):
         user_configs["instance_type"] = Instance.C5N_XLARGE.value
     else:
         # invalid instance, ignore user configs
-        user_configs = {}
-        embed = output_formatter.corekeeper_set_instance_error(instance_type)
+        user_configs.clear()
+        output_formatter.set_instance_error(embed, instance_type)
     
     return embed

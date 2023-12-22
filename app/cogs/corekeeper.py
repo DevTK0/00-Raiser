@@ -57,9 +57,10 @@ class CoreKeeper(commands.Cog):
         await interaction.response.defer()  
 
         user_configs = {}
-        user_configs["volume_size"] = 8
 
-        embed = input_parser.check_instance(user_configs, instance_type)
+        embed = output_formatter.corekeeper_set_instance_success(instance_type)
+        
+        input_parser.check_instance(embed, user_configs, instance_type)
         
         self.user_configs = user_configs
 

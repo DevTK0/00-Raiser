@@ -28,6 +28,7 @@ def update(embed, description="", color=DEFAULT):
 
 def set_instance_error(embed, instance_type):
 
+    embed.color=ERROR
     embed.description=f"{instance_type} is not a valid instance."
 
     embed.add_field(name="Testing", value="t2.small, t2.medium", inline=False)
@@ -56,6 +57,9 @@ def vrising():
 
 def vrising_status():
     return embed("V Rising", "Getting server status.", VRISING_THUMBNAIL, LOADING)
+
+def vrising_set_instance_success(instance_type):
+    return embed("V Rising", f"Instance Configured to {instance_type}.", VRISING_THUMBNAIL, SUCCESS)
 
 def vrising_start():
     return embed("V Rising", "Server is starting.", VRISING_THUMBNAIL, LOADING)
@@ -87,14 +91,6 @@ def corekeeper_status():
 def corekeeper_set_instance_success(instance_type):
     return embed("Core Keeper", f"Instance Configured to {instance_type}.", COREKEEPER_THUMBNAIL, SUCCESS)
 
-
-def corekeeper_set_instance_error(instance_type):
-
-    error = embed("Core Keeper", "", COREKEEPER_THUMBNAIL, ERROR)
-    set_instance_error(error, instance_type)
-
-    return error
-
 def corekeeper_start():
     return embed("Core Keeper", "Server is starting.", COREKEEPER_THUMBNAIL, LOADING)
 
@@ -121,6 +117,9 @@ def minecraft():
 def minecraft_status():
     return embed("Minecraft", "Getting server status.", MINECRAFT_THUMBNAIL, LOADING)
 
+def minecraft_set_instance_success(instance_type):
+    return embed("Minecraft", f"Instance Configured to {instance_type}.", MINECRAFT_THUMBNAIL, SUCCESS)
+
 def minecraft_start():
     return embed("Minecraft", "Server is starting.", MINECRAFT_THUMBNAIL, LOADING)
 
@@ -145,13 +144,14 @@ def server_stopped(embed):
 
     return embed
 
-def server_status(embed, server):
-    embed.description=server["description"]
+def server_status(embed, server_details):
+    embed.description=server_details["description"]
     
-    set_status_color(embed, server["status"])
+    set_status_color(embed, server_details["status"])
 
-    if ("ip_address" in server):
-        embed.add_field(name="IP Address", value=server["ip_address"], inline=False)
+    if ("ip_address" in server_details):
+        embed.add_field(name="IP Address", value=server_details["ip_address"], inline=False)
+        embed.add_field(name="Instance Type", value=server_details["instance_type"], inline=False)
 
     return embed
 

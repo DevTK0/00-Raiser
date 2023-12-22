@@ -4,22 +4,22 @@ from discord.ext import tasks, commands, bridge
 from discord.commands import SlashCommandGroup
 
 from app.settings import DISCORD_AUTH_TOKEN, Game, Configs
-from app.handlers import output_formatter, server
+from app.handlers import output_formatter, server, input_parser
 
 class Minecraft(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.user_configs = {}
 
     minecraft = SlashCommandGroup(name="minecraft", description="Minecraft commands")
 
-    # text command
     @commands.group(invoke_without_command=True, case_insensitive=True)
     async def Minecraft(self, ctx):
         embed = output_formatter.minecraft()
         await ctx.send(embed=embed)
 
-    # text command
+    # Only needed once per guild (used to register commands to the guild through Discord API)
     @Minecraft.command(name="sync", description="Syncs slash commands to the guild", aliases=[])
     async def sync(self, ctx, guild_id):
         
@@ -40,25 +40,41 @@ class Minecraft(commands.Cog):
         await interaction.response.defer() 
         embed = output_formatter.minecraft_start()
         message = await interaction.followup.send(embed=embed)
-        user_configs = {}
+        user_configs = self.user_configs
 
         try: 
             response = server.start_handler(Game.MINECRAFT.value, Configs[Game.MINECRAFT] | user_configs)    
-            self._get_ip_address.start(message, Game.MINECRAFT.value, embed)
+            self._get_server_details.start(message, Game.MINECRAFT.value, embed)
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
+
+    # Note that config is only saved in RAM and will be lost if the bot restarts.
+    @minecraft.command(name="set_instance", description="Configures the AWS instance to run on (temporarily).")
+    async def set_instance(self, interaction, instance_type):
+
+        await interaction.response.defer()  
+
+        user_configs = {}
+
+        embed = output_formatter.minecraft_set_instance_success(instance_type)
+        
+        input_parser.check_instance(embed, user_configs, instance_type)
+        
+        self.user_configs = user_configs
+
+        await interaction.followup.send(embed=embed)      
 
     @tasks.loop(seconds=2.5)
-    async def _get_ip_address(self, message, game, embed):
+    async def _get_server_details(self, message, game, embed):
         try:
-            ip_address = server.get_ip_address(game)
+            server_details = server.get_server_details(game)
 
-            if ip_address is not None:
-                await message.edit(embed=output_formatter.server_running(embed, ip_address))
-                self._get_ip_address.cancel()
+            if server_details is not None:
+                await message.edit(embed=output_formatter.server_running(embed, server_details))
+                self._get_server_details.cancel()
         except Exception as e:
             await message.edit(embed=output_formatter.error(embed, e, traceback.format_exc()))
-            self._get_ip_address.cancel()
+            self._get_server_details.cancel()
 
     @minecraft.command(name="stop", description="Stops the server.")
     async def stop(self, interaction):
