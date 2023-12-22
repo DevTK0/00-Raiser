@@ -38,8 +38,7 @@ flyctl launch
 # FAQs
 1. Slash commands for the cogs aren't working.
 
-Due to the way cogs are imported, the cogs will only be loaded after main bot runs the sync command.
-As such, You will need to manually sync using the text based sync command.
+Please run the sync command (for each cog) for every new Discord Server. This will tell Discord to register the /commands with the server.
 
 2. I reloaded a cog and now the slash commands aren't working
 

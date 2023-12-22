@@ -4,6 +4,7 @@ import discord
 DEFAULT=0x2a82c9
 LOADING=0xdfca1f
 RUNNING=0x33df1b
+SUCCESS=0x33df1b
 STOPPED=0x747474
 ERROR=0xdf0f1a
 
@@ -24,6 +25,20 @@ def update(embed, description="", color=DEFAULT):
     embed.description=description
     embed.color=color
     return embed
+
+def set_instance_error(embed, instance_type):
+
+    embed.description=f"{instance_type} is not a valid instance."
+
+    embed.add_field(name="Testing", value="t2.small, t2.medium", inline=False)
+    # embed.add_field(name="GPU", value="g4dn.xlarge", inline=False)
+    embed.add_field(name="Budget", value="m5a.large, m5a.xlarge, c5a.large, c5a.xlarge", inline=False)
+    embed.add_field(name="Normal", value="m5n.large, m5n.xlarge, c5.large, c5.xlarge", inline=False)
+    embed.add_field(name="Performance", value="m5zn.large, m5zn.xlarge, c5n.large, c5n.xlarge", inline=False)
+
+
+def OOR_sync():
+    return embed("00 Raiser", "00R is syncing.", DEFAULT_THUMBNAIL, LOADING)
 
 def vrising():
     help = embed(
@@ -63,10 +78,22 @@ def corekeeper():
     help.add_field(name="/corekeeper stop", value="Stops the server.", inline=False)
     help.add_field(name="/corekeeper status", value="Gets the server status.", inline=False)
     help.add_field(name="00R corekeeper sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
+
     return help
 
 def corekeeper_status():
     return embed("Core Keeper", "Getting server status.", COREKEEPER_THUMBNAIL, LOADING)
+
+def corekeeper_set_instance_success(instance_type):
+    return embed("Core Keeper", f"Instance Configured to {instance_type}.", COREKEEPER_THUMBNAIL, SUCCESS)
+
+
+def corekeeper_set_instance_error(instance_type):
+
+    error = embed("Core Keeper", "", COREKEEPER_THUMBNAIL, ERROR)
+    set_instance_error(error, instance_type)
+
+    return error
 
 def corekeeper_start():
     return embed("Core Keeper", "Server is starting.", COREKEEPER_THUMBNAIL, LOADING)
@@ -103,10 +130,12 @@ def minecraft_stop():
 def minecraft_sync():
     return embed("Minecraft", "Server is syncing.", MINECRAFT_THUMBNAIL, LOADING)
 
-def server_running(embed, ip):
+def server_running(embed, server_details):
+    print(server_details)
     embed.description="Server is running."
     embed.color=RUNNING
-    embed.add_field(name="IP Address", value=ip, inline=False)
+    embed.add_field(name="IP Address", value=server_details["ip_address"], inline=False)
+    embed.add_field(name="Instance Type", value=server_details["instance_type"], inline=False)
 
     return embed
 

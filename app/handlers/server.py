@@ -1,20 +1,20 @@
-import asyncio
 from app.handlers.aws import AWS
+import logging
 
 def stop_handler(game):
     
     with AWS() as aws:
         server = aws.get_server_status(game)
 
-        if (server["status"] == "running"):
-            aws.stop_server(game)
-            return "Server is shutting down."
-        
         if (server["status"] == "stopping"):
-            return "Server is already shutting down."
-
-        if (server["status"] == "stopped" or server["status"] == "archived"):
-            return "Server is already stopped."
+            raise Exception("Server is already shutting down.")
+        elif (server["status"] == "stopped" or server["status"] == "archived"):
+            raise Exception("Server is already stopped.")
+        elif (server["status"] == "running"):
+            aws.stop_server(game)
+        else:
+            logging.error(f"Unknown state found for {game}. {server}")
+            raise Exception("Unknown state.")
 
 def start_handler(game, configs):
 
@@ -22,17 +22,16 @@ def start_handler(game, configs):
         server = aws.get_server_status(game)
         
         if (server["status"] == "running"):
-            return "Server is already running."
-
-        if (server["status"] == "stopped" and server["ami_id"] is not None):
+            raise Exception("Server is already running.")
+        elif (server["status"] == "stopping"):
+            raise Exception("Server is shutting down. Please wait a few minutes and try again.")
+        elif (server["status"] == "archived"):
+            raise Exception("Server has been archived due to inactivity.")
+        elif (server["status"] == "stopped" and server["ami_id"] is not None):
             aws.start_server(game, configs)
-            return "Server is starting."
-
-        if (server["status"] == "stopping"):
-            return "Server is shutting down. Please wait a few minutes and try again."
-
-        if (server["status"] == "archived"):
-            return "Server has been archived due to inactivity."
+        else:
+            logging.error(f"Unknown state found for {game} with configs: {configs}. {server}")
+            raise Exception("Unknown state.")
 
 def status_handler(game):
 
@@ -53,12 +52,12 @@ def status_handler(game):
 
     return server
 
-def get_ip_address(game):
+def get_server_details(game):
     with AWS() as aws:
         server = aws.get_server_status(game)
 
         if "ip_address" in server:
-            return server["ip_address"]
+            return server
 
         return None
 

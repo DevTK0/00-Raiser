@@ -56,7 +56,7 @@ class AWS:
                     }
                 ],
             )["Reservations"]
-
+ 
         if (len(reservations) > 1):
             raise Exception("More than one reservation")
 
