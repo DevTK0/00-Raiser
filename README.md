@@ -7,14 +7,23 @@ poetry run app
 
 Run the following to sync the slash commands to the server.
 ```
+00R sync <guild_id>
 00R <game> sync <guild_id>
 ```
 
 The following slash commands are available:
-```
+```markdown
+# 00R
+/load <game>
+/reload <game>
+/unload <game>
+
+# Game Cogs
 /<game> start
 /<game> stop
 /<game> status
+/<game> restart
+/<game> set_instance <instance_type>
 ```
 
 # Running Tests
