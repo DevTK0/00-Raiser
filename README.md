@@ -22,24 +22,20 @@ The following slash commands are available:
 
 ```bash
 # run all tests
-poetry pytest
+pytest
 
 # run specific tests
-poetry pytest -k <method_name> -v
+pytest -k <method_name> -v
 ```
 
 # Deployment
 The bot is hosted on Fly.io
 
 ```
-flyctl launch
+flyctl deploy
 ```
 
 # FAQs
 1. Slash commands for the cogs aren't working.
 
 Please run the sync command (for each cog) for every new Discord Server. This will tell Discord to register the /commands with the server.
-
-2. I reloaded a cog and now the slash commands aren't working
-
-For some reason, there is no easy way to update/replace existing slash commands so when you reload the cogs and run the sync again, it will throw an error indicating duplicate commands. The only way to resolve this at the moment is to restart the bot or kick it and make it rejoin the server.
