@@ -11,6 +11,7 @@ ERROR=0xdf0f1a
 VRISING_THUMBNAIL="https://cdn.discordapp.com/icons/803241158054510612/a_7dcd3bca6f450e85ea1c2802a35b6808.gif?size=32"
 MINECRAFT_THUMBNAIL="https://cdn.discordapp.com/icons/302094807046684672/a_4a2d4c71d0ec0c7f72792d7280a6529d.webp?size=32"
 COREKEEPER_THUMBNAIL="https://cdn.discordapp.com/icons/851842678340845600/1288f168ce7d27e283fd922569e458d0.webp?size=32"
+PALWORLD_THUMBNAIL="https://cdn.discordapp.com/icons/505994577942151180/b03aa1253c3b1017a6b78c4a58489b1d.png?size=32"
 DEFAULT_THUMBNAIL="https://cdn.discordapp.com/avatars/1016970522791260194/50e1bc4a18d23f6cbf4863a2f541acd1.webp?size=32"
 
 # logging.config.fileConfig("app/logging.conf")
@@ -77,6 +78,39 @@ def vrising_restart():
 
 def vrising_sync():
     return embed("V Rising", "Server is syncing.", VRISING_THUMBNAIL, LOADING)
+
+def palworld():
+    help = embed(
+        title="Palworld", 
+        description="Fight, farm, build and work alongside mysterious creatures called \"Pals\" in this completely new multiplayer, open world survival and crafting game!", 
+        thumbnail=PALWORLD_THUMBNAIL, 
+        color=DEFAULT,
+        url="https://store.steampowered.com/app/1621690/Core_Keeper/"
+        )
+    help.add_field(name="/palworld start", value="Starts the server.", inline=False)
+    help.add_field(name="/palworld stop", value="Stops the server.", inline=False)
+    help.add_field(name="/palworld status", value="Gets the server status.", inline=False)
+    help.add_field(name="00R palworld sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
+
+    return help
+
+def palworld_status():
+    return embed("Palworld", "Getting server status.", PALWORLD_THUMBNAIL, LOADING)
+
+def palworld_set_instance_success(instance_type):
+    return embed("Palworld", f"Instance Configured to {instance_type}.", PALWORLD_THUMBNAIL, SUCCESS)
+
+def palworld_start():
+    return embed("Palworld", "Server is starting.", PALWORLD_THUMBNAIL, LOADING)
+
+def palworld_stop():
+    return embed("Palworld", "Server is stopping.", PALWORLD_THUMBNAIL, LOADING)
+
+def palworld_restart():
+    return embed("Palworld", "Server is restarting.", PALWORLD_THUMBNAIL, LOADING)
+
+def palworld_sync():
+    return embed("Palworld", "Server is syncing.", PALWORLD_THUMBNAIL, LOADING)
 
 def corekeeper():
     help = embed(

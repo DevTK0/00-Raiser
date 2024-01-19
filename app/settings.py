@@ -14,6 +14,7 @@ class Game(Enum):
     V_RISING = "V Rising"
     MINECRAFT = "Minecraft"
     CORE_KEEPER = "Core Keeper"
+    PALWORLD = "Palworld"
 
 class Instance(Enum):
     # For Testing
@@ -49,5 +50,9 @@ Configs = {
     Game.CORE_KEEPER: {
         "instance_type": Instance.C5_LARGE.value,
         "volume_size": 8
+    },
+    Game.PALWORLD: {
+        "instance_type": Instance.C5A_LARGE.value,
+        "volume_size": 16
     }
 }
