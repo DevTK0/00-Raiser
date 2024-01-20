@@ -57,7 +57,9 @@ def vrising():
         )
     help.add_field(name="/vrising start", value="Starts the server.", inline=False)
     help.add_field(name="/vrising stop", value="Stops the server.", inline=False)
+    help.add_field(name="/vrising restart", value="Restarts the server.", inline=False)
     help.add_field(name="/vrising status", value="Gets the server status.", inline=False)
+    help.add_field(name="/vrising set_instance", value="Changes the instance type.", inline=False)
     help.add_field(name="00R vrising sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
     return help
 
@@ -89,7 +91,9 @@ def palworld():
         )
     help.add_field(name="/palworld start", value="Starts the server.", inline=False)
     help.add_field(name="/palworld stop", value="Stops the server.", inline=False)
+    help.add_field(name="/palworld restart", value="Restarts the server.", inline=False)
     help.add_field(name="/palworld status", value="Gets the server status.", inline=False)
+    help.add_field(name="/palworld set_instance", value="Changes the instance type.", inline=False)
     help.add_field(name="00R palworld sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
 
     return help
@@ -122,7 +126,9 @@ def corekeeper():
         )
     help.add_field(name="/corekeeper start", value="Starts the server.", inline=False)
     help.add_field(name="/corekeeper stop", value="Stops the server.", inline=False)
+    help.add_field(name="/corekeeper restart", value="Restarts the server.", inline=False)
     help.add_field(name="/corekeeper status", value="Gets the server status.", inline=False)
+    help.add_field(name="/corekeeper set_instance", value="Changes the instance type.", inline=False)
     help.add_field(name="00R corekeeper sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
 
     return help
@@ -155,7 +161,9 @@ def minecraft():
         )
     help.add_field(name="/minecraft start", value="Starts the server.", inline=False)
     help.add_field(name="/minecraft stop", value="Stops the server.", inline=False)
+    help.add_field(name="/minecraft restart", value="Restarts the server.", inline=False)
     help.add_field(name="/minecraft status", value="Gets the server status.", inline=False)
+    help.add_field(name="/minecraft set_instance", value="Changes the instance type.", inline=False)
     help.add_field(name="00R minecraft sync <guild_id>", value="Syncs slash commands to the server.", inline=False)
     return help
 
