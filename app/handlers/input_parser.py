@@ -11,30 +11,24 @@ def check_instance(embed, user_configs, instance_type):
         user_configs["instance_type"] = Instance.T2_MEDIUM.value
     elif instance_type == Instance.G4DN_XLARGE.value:
         user_configs["instance_type"] = Instance.G4DN_XLARGE.value
-    elif instance_type == Instance.M5A_LARGE.value:
-        user_configs["instance_type"] = Instance.M5A_LARGE.value
-    elif instance_type == Instance.M5A_XLARGE.value:
-        user_configs["instance_type"] = Instance.M5A_XLARGE.value
     elif instance_type == Instance.C5A_LARGE.value:
         user_configs["instance_type"] = Instance.C5A_LARGE.value
     elif instance_type == Instance.C5A_XLARGE.value:
         user_configs["instance_type"] = Instance.C5A_XLARGE.value
-    elif instance_type == Instance.M5N_LARGE.value:
-        user_configs["instance_type"] = Instance.M5N_LARGE.value
-    elif instance_type == Instance.M5N_XLARGE.value:
-        user_configs["instance_type"] = Instance.M5N_XLARGE.value
-    elif instance_type == Instance.C5_LARGE.value:
-        user_configs["instance_type"] = Instance.C5_LARGE.value
-    elif instance_type == Instance.C5_XLARGE.value:
-        user_configs["instance_type"] = Instance.C5_XLARGE.value
-    elif instance_type == Instance.M5ZN_LARGE.value:
-        user_configs["instance_type"] = Instance.M5ZN_LARGE.value
-    elif instance_type == Instance.M5ZN_XLARGE.value:
-        user_configs["instance_type"] = Instance.M5ZN_XLARGE.value
-    elif instance_type == Instance.C5N_LARGE.value:
-        user_configs["instance_type"] = Instance.C5N_LARGE.value
-    elif instance_type == Instance.C5N_XLARGE.value:
-        user_configs["instance_type"] = Instance.C5N_XLARGE.value
+    elif instance_type == Instance.C5A_2XLARGE.value:
+        user_configs["instance_type"] = Instance.C5A_2XLARGE.value
+    elif instance_type == Instance.R5A_LARGE.value:
+        user_configs["instance_type"] = Instance.R5A_LARGE.value
+    elif instance_type == Instance.R5A_XLARGE.value:
+        user_configs["instance_type"] = Instance.R5A_XLARGE.value
+    elif instance_type == Instance.R5A_2XLARGE.value:
+        user_configs["instance_type"] = Instance.R5A_2XLARGE.value
+    elif instance_type == Instance.R6A_LARGE.value:
+        user_configs["instance_type"] = Instance.R6A_LARGE.value
+    elif instance_type == Instance.R6A_XLARGE.value:
+        user_configs["instance_type"] = Instance.R6A_XLARGE.value
+    elif instance_type == Instance.R6A_2XLARGE.value:
+        user_configs["instance_type"] = Instance.R6A_2XLARGE.value
     else:
         # invalid instance, ignore user configs
         user_configs.clear()

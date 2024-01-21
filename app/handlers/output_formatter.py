@@ -32,6 +32,7 @@ def restart(embed):
     embed.color=LOADING
     return embed
 
+
 def set_instance_error(embed, instance_type):
 
     embed.color=ERROR
@@ -39,9 +40,9 @@ def set_instance_error(embed, instance_type):
 
     embed.add_field(name="Testing", value="t2.small, t2.medium", inline=False)
     # embed.add_field(name="GPU", value="g4dn.xlarge", inline=False)
-    embed.add_field(name="Budget", value="m5a.large, m5a.xlarge, c5a.large, c5a.xlarge", inline=False)
-    embed.add_field(name="Normal", value="m5n.large, m5n.xlarge, c5.large, c5.xlarge", inline=False)
-    embed.add_field(name="Performance", value="m5zn.large, m5zn.xlarge, c5n.large, c5n.xlarge", inline=False)
+    embed.add_field(name="Budget", value="c5a.large, r5a.large, r6a.large", inline=False)
+    embed.add_field(name="Normal", value="c5a.xlarge, r5a.xlarge, r6a.xlarge", inline=False)
+    embed.add_field(name="Performance", value="c5a.2xlarge, r5a.2xlarge, r6a.2xlarge", inline=False)
 
 
 def OOR_sync():
